@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="BattleEquipControl">
+    <output-path>$PROJECT_DIR$/out/artifacts/BattleEquipControl</output-path>
+    <root id="archive" name="BattleEquipControl.jar">
+      <element id="module-output" name="BattleEquipControl" />
+      <element id="file-copy" path="$PROJECT_DIR$/config.yml" />
+      <element id="file-copy" path="$PROJECT_DIR$/plugin.yml" />
+    </root>
+  </artifact>
+</component>
