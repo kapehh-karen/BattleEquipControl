@@ -15,6 +15,10 @@ import org.bukkit.plugin.java.JavaPlugin;
  * Created by Karen on 25.08.2014.
  */
 public class MainListener implements Listener {
+    /*
+        TODO: Вычислять строку формулы для Экспы/Дамага/Защиты при инициализации для всех левелов сразу
+     */
+
     JavaPlugin plugin;
 
     public MainListener(JavaPlugin plugin) {

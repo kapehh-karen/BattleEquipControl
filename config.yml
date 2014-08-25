@@ -1,0 +1,65 @@
+ARMOR:
+
+    LEATHER_HELMET:
+        max_level: 10
+        eval_level_strange: lvl * 0.3
+    IRON_HELMET:
+        max_level: 10
+        eval_level_strange: lvl * 0.3
+    GOLD_HELMET:
+        max_level: 10
+        eval_level_strange: lvl * 0.3
+    DIAMOND_HELMET:
+        max_level: 10
+        eval_level_strange: lvl * 0.3
+    CHAINMAIL_HELMET:
+        max_level: 10
+        eval_level_strange: lvl * 0.3
+
+    LEATHER_CHESTPLATE:
+        max_level: 10
+        eval_level_strange: lvl * 0.3
+    IRON_CHESTPLATE:
+        max_level: 10
+        eval_level_strange: lvl * 0.3
+    GOLD_CHESTPLATE:
+        max_level: 10
+        eval_level_strange: lvl * 0.3
+    DIAMOND_CHESTPLATE:
+        max_level: 10
+        eval_level_strange: lvl * 0.3
+    CHAINMAIL_CHESTPLATE:
+        max_level: 10
+        eval_level_strange: lvl * 0.3
+
+    LEATHER_LEGGINGS:
+        max_level: 10
+        eval_level_strange: lvl * 0.3
+    IRON_LEGGINGS:
+        max_level: 10
+        eval_level_strange: lvl * 0.3
+    GOLD_LEGGINGS:
+        max_level: 10
+        eval_level_strange: lvl * 0.3
+    DIAMOND_LEGGINGS:
+        max_level: 10
+        eval_level_strange: lvl * 0.3
+    CHAINMAIL_LEGGINGS:
+        max_level: 10
+        eval_level_strange: lvl * 0.3
+
+    LEATHER_BOOTS:
+        max_level: 10
+        eval_level_strange: lvl * 0.3
+    IRON_BOOTS:
+        max_level: 10
+        eval_level_strange: lvl * 0.3
+    GOLD_BOOTS:
+        max_level: 10
+        eval_level_strange: lvl * 0.3
+    DIAMOND_BOOTS:
+        max_level: 10
+        eval_level_strange: lvl * 0.3
+    CHAINMAIL_BOOTS:
+        max_level: 10
+        eval_level_strange: lvl * 0.3
