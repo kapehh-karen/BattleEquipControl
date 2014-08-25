@@ -15,7 +15,7 @@ public class Main extends JavaPlugin {
             return;
         }
 
-        getServer().getPluginManager().registerEvents(new MainListener(), this);
+        getServer().getPluginManager().registerEvents(new MainListener(this), this);
     }
 
     @Override
