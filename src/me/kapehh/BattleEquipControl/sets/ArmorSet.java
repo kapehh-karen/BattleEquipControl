@@ -10,11 +10,12 @@ import java.util.List;
  */
 public class ArmorSet {
     Material material = Material.AIR;
-    Integer maxLevel;
+    Integer maxLevel = 1;
     List<Integer> strangeList = new ArrayList<Integer>();
 
-    public ArmorSet(Material material, Integer maxLevel, List<Integer> strangeList) {
-        this.strangeList = strangeList;
+    public ArmorSet(Material material, Integer maxLevel, String evalLevelStrange) {
+        // TODO: Сделать генерацию strange для каждого уровня и добавить в список
+        this.strangeList.add(5);
         this.maxLevel = maxLevel;
         this.material = material;
     }
@@ -29,5 +30,14 @@ public class ArmorSet {
 
     public int getMaxLevel() {
         return maxLevel;
+    }
+
+    @Override
+    public String toString() {
+        return "ArmorSet{" +
+                "material=" + material +
+                ", maxLevel=" + maxLevel +
+                ", strangeList=" + strangeList +
+                '}';
     }
 }

@@ -1,3 +1,5 @@
+# В формулах, переменная lvl заменяется на уровень оружия или брони
+
 ARMOR:
 
     LEATHER_HELMET:
@@ -63,3 +65,12 @@ ARMOR:
     CHAINMAIL_BOOTS:
         max_level: 10
         eval_level_strange: lvl * 0.3
+
+WEAPONS:
+
+    HAND:
+        damage: 1
+
+    BOW:
+        max_level: 10
+        eval_level_damage: 5 + lvl * 2

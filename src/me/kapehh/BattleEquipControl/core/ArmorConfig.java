@@ -15,7 +15,7 @@ public class ArmorConfig {
     public void addArmorSet(ArmorSet armorSet) {
         armorSets.add(armorSet);
     }
-    
+
     public ArmorSet getArmorSet(Material material) {
         for (ArmorSet armorSet : armorSets) {
             if (armorSet.getMaterial().equals(material)) {
