@@ -23,7 +23,7 @@ public class WeaponSet {
         return material;
     }
 
-    public double getStrange(int level) {
+    public double getDamage(int level) {
         if (level < 1) level = 1;
         if (level > maxLevel) level = maxLevel;
         return damageList.get(level - 1);
@@ -38,7 +38,7 @@ public class WeaponSet {
         return "WeaponSet{" +
                 "material=" + material +
                 ", maxLevel=" + maxLevel +
-                ", strangeList=" + damageList +
+                ", damageList=" + damageList +
                 '}';
     }
 }

@@ -2,7 +2,6 @@ package me.kapehh.BattleEquipControl.sets;
 
 import org.bukkit.Material;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,10 +10,10 @@ import java.util.List;
 public class ArmorSet {
     Material material = Material.AIR;
     Integer maxLevel = 1;
-    List<Double> strangeList = null;
+    List<Double> strongList = null;
 
-    public ArmorSet(Material material, Integer maxLevel, List<Double> strangeList) {
-        this.strangeList = strangeList;
+    public ArmorSet(Material material, Integer maxLevel, List<Double> strongList) {
+        this.strongList = strongList;
         this.maxLevel = maxLevel;
         this.material = material;
     }
@@ -23,10 +22,10 @@ public class ArmorSet {
         return material;
     }
 
-    public double getStrange(int level) {
+    public double getStrong(int level) {
         if (level < 1) level = 1;
         if (level > maxLevel) level = maxLevel;
-        return strangeList.get(level - 1);
+        return strongList.get(level - 1);
     }
 
     public int getMaxLevel() {
@@ -38,7 +37,7 @@ public class ArmorSet {
         return "ArmorSet{" +
                 "material=" + material +
                 ", maxLevel=" + maxLevel +
-                ", strangeList=" + strangeList +
+                ", strongList=" + strongList +
                 '}';
     }
 }

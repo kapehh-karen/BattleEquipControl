@@ -130,7 +130,7 @@ public class MainConfig {
 
         for (Material material : allArmors) {
             int max = cfg.getInt("ARMOR." + material.toString() + ".max_level", 1);
-            String eval = cfg.getString("ARMOR." + material.toString() + ".eval_level_strange", "0");
+            String eval = cfg.getString("ARMOR." + material.toString() + ".eval_level_strong", "0");
             try {
                 ArmorSet armorSet = new ArmorSet(
                     material,

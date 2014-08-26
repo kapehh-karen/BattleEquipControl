@@ -11,11 +11,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-
-import java.util.logging.Logger;
 
 /**
  * Created by Karen on 25.08.2014.
@@ -67,10 +64,10 @@ public class MainListener implements Listener {
         }
 
         // Возвращаем дамаг в зависимости от уровня вещи TODO: Доделать уровень вещи
-        return weaponSet.getStrange(1);
+        return weaponSet.getDamage(1);
     }
 
-    private double getStrange(Player player) {
+    private double getStrong(Player player) {
         PlayerInventory inventory = player.getInventory();
         ItemStack helmet = inventory.getHelmet();
         ItemStack chestplate = inventory.getChestplate();
@@ -81,28 +78,28 @@ public class MainListener implements Listener {
         if (!isAir(helmet)) {
             ArmorSet armorSet = main.getArmorConfig().getArmorSet(helmet.getType());
             if (armorSet != null) {
-                procents += armorSet.getStrange(1);
+                procents += armorSet.getStrong(1);
             }
         }
 
         if (!isAir(chestplate)) {
             ArmorSet armorSet = main.getArmorConfig().getArmorSet(chestplate.getType());
             if (armorSet != null) {
-                procents += armorSet.getStrange(1);
+                procents += armorSet.getStrong(1);
             }
         }
 
         if (!isAir(leggins)) {
             ArmorSet armorSet = main.getArmorConfig().getArmorSet(leggins.getType());
             if (armorSet != null) {
-                procents += armorSet.getStrange(1);
+                procents += armorSet.getStrong(1);
             }
         }
 
         if (!isAir(boots)) {
             ArmorSet armorSet = main.getArmorConfig().getArmorSet(boots.getType());
             if (armorSet != null) {
-                procents += armorSet.getStrange(1);
+                procents += armorSet.getStrong(1);
             }
         }
 
@@ -151,10 +148,10 @@ public class MainListener implements Listener {
             stringBuilder.append("ATTACKED: ").append(playerAttacked.toString()).append('\n');
             stringBuilder.append("ATTACKED HP: ").append(playerAttacked.getHealth()).append('\n');
 
-            double attackedStrange = getStrange(playerAttacked);
-            damage = damage - (damage * (attackedStrange / 100));
+            double attackedStrong = getStrong(playerAttacked);
+            damage = damage - (damage * (attackedStrong / 100));
 
-            stringBuilder.append("ATTACKED STRANGE: ").append(attackedStrange).append('\n');
+            stringBuilder.append("ATTACKED STRONG: ").append(attackedStrong).append('\n');
         }
 
         stringBuilder.append("RESULT DAMAGE: ").append(damage).append('\n');
