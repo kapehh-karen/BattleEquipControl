@@ -71,7 +71,7 @@ public class MainConfig {
     private List<Double> evalString(String eval, int max) throws ScriptException {
         List<Double> doubles = new ArrayList<Double>();
         ScriptEngine scriptEngine = main.getScriptEngine();
-        for (int i = 1; i < max; i++) {
+        for (int i = 1; i <= max; i++) {
             scriptEngine.put("lvl", i);
             doubles.add((Double) scriptEngine.eval(eval));
         }
@@ -132,11 +132,13 @@ public class MainConfig {
             int max = cfg.getInt("ARMOR." + material.toString() + ".max_level", 1);
             String eval = cfg.getString("ARMOR." + material.toString() + ".eval_level_strange", "0");
             try {
-                armorConfig.addArmorSet(new ArmorSet(
+                ArmorSet armorSet = new ArmorSet(
                     material,
                     max,
                     evalString(eval, max)
-                ));
+                );
+                armorConfig.addArmorSet(armorSet);
+                main.getLogger().info(armorSet.toString());
             } catch (ScriptException e) {
                 e.printStackTrace();
             }
@@ -146,11 +148,13 @@ public class MainConfig {
             int max = cfg.getInt("WEAPONS." + material.toString() + ".max_level", 1);
             String eval = cfg.getString("WEAPONS." + material.toString() + ".eval_level_damage", "0");
             try {
-                weaponConfig.addWeaponSet(new WeaponSet(
+                WeaponSet weaponSet = new WeaponSet(
                     material,
                     max,
                     evalString(eval, max)
-                ));
+                );
+                weaponConfig.addWeaponSet(weaponSet);
+                main.getLogger().info(weaponSet.toString());
             } catch (ScriptException e) {
                 e.printStackTrace();
             }

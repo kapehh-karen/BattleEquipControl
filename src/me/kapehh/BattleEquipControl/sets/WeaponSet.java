@@ -35,7 +35,7 @@ public class WeaponSet {
 
     @Override
     public String toString() {
-        return "ArmorSet{" +
+        return "WeaponSet{" +
                 "material=" + material +
                 ", maxLevel=" + maxLevel +
                 ", strangeList=" + damageList +

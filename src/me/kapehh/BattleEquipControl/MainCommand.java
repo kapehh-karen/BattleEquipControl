@@ -14,7 +14,7 @@ public class MainCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String s, String[] strings) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            sender.sendMessage(String.format("%f / %f", player.getHealth(), player.getMaxHealth()));
+            sender.sendMessage(String.format("HP: %f from %f", player.getHealth(), player.getMaxHealth()));
         }
         return true;
     }
