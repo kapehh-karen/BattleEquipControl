@@ -6,15 +6,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Karen on 25.08.2014.
+ * Created by Karen on 26.08.2014.
  */
-public class ArmorSet {
+public class WeaponSet {
     Material material = Material.AIR;
     Integer maxLevel = 1;
-    List<Double> strangeList = null;
+    List<Double> damageList = null;
 
-    public ArmorSet(Material material, Integer maxLevel, List<Double> strangeList) {
-        this.strangeList = strangeList;
+    public WeaponSet(Material material, Integer maxLevel, List<Double> damageList) {
+        this.damageList = damageList;
         this.maxLevel = maxLevel;
         this.material = material;
     }
@@ -26,7 +26,7 @@ public class ArmorSet {
     public double getStrange(int level) {
         if (level < 1) level = 1;
         if (level > maxLevel) level = maxLevel;
-        return strangeList.get(level - 1);
+        return damageList.get(level - 1);
     }
 
     public int getMaxLevel() {
@@ -38,7 +38,7 @@ public class ArmorSet {
         return "ArmorSet{" +
                 "material=" + material +
                 ", maxLevel=" + maxLevel +
-                ", strangeList=" + strangeList +
+                ", strangeList=" + damageList +
                 '}';
     }
 }

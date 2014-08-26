@@ -68,9 +68,54 @@ ARMOR:
 
 WEAPONS:
 
-    HAND:
-        damage: 1
-
     BOW:
+        max_level: 10
+        eval_level_damage: 5 + lvl * 2
+
+    WOOD_SWORD:
+        max_level: 10
+        eval_level_damage: 5 + lvl * 2
+    STONE_SWORD:
+        max_level: 10
+        eval_level_damage: 5 + lvl * 2
+    IRON_SWORD:
+        max_level: 10
+        eval_level_damage: 5 + lvl * 2
+    GOLD_SWORD:
+        max_level: 10
+        eval_level_damage: 5 + lvl * 2
+    DIAMOND_SWORD:
+        max_level: 10
+        eval_level_damage: 5 + lvl * 2
+
+    WOOD_AXE:
+        max_level: 10
+        eval_level_damage: 5 + lvl * 2
+    STONE_AXE:
+        max_level: 10
+        eval_level_damage: 5 + lvl * 2
+    IRON_AXE:
+        max_level: 10
+        eval_level_damage: 5 + lvl * 2
+    GOLD_AXE:
+        max_level: 10
+        eval_level_damage: 5 + lvl * 2
+    DIAMOND_AXE:
+        max_level: 10
+        eval_level_damage: 5 + lvl * 2
+
+    WOOD_PICKAXE:
+        max_level: 10
+        eval_level_damage: 5 + lvl * 2
+    STONE_PICKAXE:
+        max_level: 10
+        eval_level_damage: 5 + lvl * 2
+    IRON_PICKAXE:
+        max_level: 10
+        eval_level_damage: 5 + lvl * 2
+    GOLD_PICKAXE:
+        max_level: 10
+        eval_level_damage: 5 + lvl * 2
+    DIAMOND_PICKAXE:
         max_level: 10
         eval_level_damage: 5 + lvl * 2

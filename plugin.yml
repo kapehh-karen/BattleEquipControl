@@ -2,7 +2,8 @@ name: BattleEquipControl
 main: me.kapehh.BattleEquipControl.Main
 author: kapehh
 version: 1.0.0
-#commands:
-#    arenascript:
-#      usage: /<command> <arena> <player>
-#      description: Simple Arena Script
+commands:
+    battleequip:
+        usage: /<command>
+        description: BattleEquipControl
+        aliases: bec
