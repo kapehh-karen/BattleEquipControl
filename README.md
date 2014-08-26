@@ -11,7 +11,7 @@ ARMOR:
   
   LEATHER_HELMET:
     max_level: 10
-    eval_level_strange: lvl * 0.3
+    eval_level_strong: lvl * 0.3
   
   . . .
     
