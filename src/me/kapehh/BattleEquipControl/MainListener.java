@@ -102,6 +102,8 @@ public class MainListener implements Listener {
             if (isAir(itemStack)) {
                 return -1;
             }
+
+            material = itemStack.getType();
         } else if (entity instanceof Projectile) {
             material = Material.BOW; // BY ARROW TODO: Возможно придется в будущем заменить на Material.ARROW чтоб игроки не лупили простым луком
         } else {
@@ -195,14 +197,15 @@ public class MainListener implements Listener {
         if (playerAttacker != null) {
             stringBuilder.append("ATTACKER: ").append(playerAttacker.toString()).append('\n');
 
-            double attackerDamage = getDamage(playerAttacker);
+            double attackerDamage = getDamage(event.getDamager());
             if (attackerDamage >= 0) {
                 damage += attackerDamage;
             }
 
             ItemStack itemInHand = playerAttacker.getItemInHand();
             if (!isAir(itemInHand) && itemInHand.getDurability() != 0) {
-                itemInHand.setDurability((short) (itemInHand.getDurability() - 1)); // SAVE DURABILITY
+                //itemInHand.setDurability((short) (itemInHand.getDurability() - 1)); // SAVE DURABILITY
+                itemInHand.setDurability((short) 0);
                 playerAttacker.updateInventory();
             }
 
@@ -214,8 +217,47 @@ public class MainListener implements Listener {
             stringBuilder.append("ATTACKED: ").append(playerAttacked.toString()).append('\n');
             stringBuilder.append("ATTACKED HP: ").append(playerAttacked.getHealth()).append('\n');
 
-            double attackedStrong = getStrong(playerAttacked);
+            double attackedStrong = getStrong(event.getEntity());
             damage = damage - (damage * (attackedStrong / 100));
+
+            PlayerInventory inventory = playerAttacked.getInventory();
+            ItemStack helmet = inventory.getHelmet();
+            ItemStack chestplate = inventory.getChestplate();
+            ItemStack leggins = inventory.getLeggings();
+            ItemStack boots = inventory.getBoots();
+            if (!isAir(helmet)) {
+                helmet.setDurability((short) 0);
+                inventory.setHelmet(helmet);
+            }
+            if (!isAir(chestplate)) {
+                chestplate.setDurability((short) 0);
+                inventory.setChestplate(chestplate);
+            }
+            if (!isAir(leggins)) {
+                leggins.setDurability((short) 0);
+                inventory.setLeggings(leggins);
+            }
+            if (!isAir(boots)) {
+                boots.setDurability((short) 0);
+                inventory.setBoots(boots);
+            }
+            /*if (!isAir(helmet) && helmet.getDurability() != 0) {
+                helmet.setDurability((short) (helmet.getDurability() - 1)); // SAVE DURABILITY
+                inventory.setHelmet(helmet);
+            }
+            if (!isAir(chestplate) && chestplate.getDurability() != 0) {
+                chestplate.setDurability((short) (chestplate.getDurability() - 1)); // SAVE DURABILITY
+                inventory.setChestplate(chestplate);
+            }
+            if (!isAir(leggins) && leggins.getDurability() != 0) {
+                leggins.setDurability((short) (leggins.getDurability() - 1)); // SAVE DURABILITY
+                inventory.setLeggings(leggins);
+            }
+            if (!isAir(boots) && boots.getDurability() != 0) {
+                boots.setDurability((short) (boots.getDurability() - 1)); // SAVE DURABILITY
+                inventory.setBoots(boots);
+            }*/
+            playerAttacked.updateInventory();
 
             stringBuilder.append("ATTACKED STRONG: ").append(attackedStrong).append('\n');
         }
@@ -239,10 +281,12 @@ public class MainListener implements Listener {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
             ItemStack bow = event.getBow();
-            if (bow.getDurability() != 0) {
+            bow.setDurability((short) 0);
+            /*if (bow.getDurability() != 0) {
                 bow.setDurability((short) (bow.getDurability() - 1)); // SAVE DURABILITY
                 player.updateInventory();
-            }
+            }*/
+            player.updateInventory();
         }
     }
 
