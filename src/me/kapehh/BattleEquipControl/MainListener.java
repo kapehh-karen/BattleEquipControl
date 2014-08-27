@@ -11,8 +11,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 /**
  * Created by Karen on 25.08.2014.
@@ -22,6 +25,8 @@ public class MainListener implements Listener {
         TODO: Вычислять строку формулы для Экспы/Дамага/Защиты при инициализации для всех левелов сразу
 
         TODO: У Лука учитывать силу натяжения (событие EntityShootBowEvent поле getForce)
+
+        TODO: в EntityDamage у оружия уже имеется измененная прочность
      */
 
     Main main;
@@ -50,15 +55,60 @@ public class MainListener implements Listener {
         return (itemStack == null || itemStack.getType().equals(Material.AIR));
     }
 
-    private double getDamage(Player player) {
-        ItemStack itemStack = player.getItemInHand();
+    public double getDamageReduced(Player player)
+    {
+        PlayerInventory inv = player.getInventory();
+        ItemStack boots = inv.getBoots();
+        ItemStack helmet = inv.getHelmet();
+        ItemStack chest = inv.getChestplate();
+        ItemStack pants = inv.getLeggings();
+        double red = 0.0;
 
-        // Если в руках ничего нет
-        if (isAir(itemStack)) {
-            return -1;
+        if(helmet.getType() == Material.LEATHER_HELMET)red = red + 0.04;
+        else if(helmet.getType() == Material.GOLD_HELMET)red = red + 0.08;
+        else if(helmet.getType() == Material.CHAINMAIL_HELMET)red = red + 0.08;
+        else if(helmet.getType() == Material.IRON_HELMET)red = red + 0.08;
+        else if(helmet.getType() == Material.DIAMOND_HELMET)red = red + 0.12;
+
+        if(boots.getType() == Material.LEATHER_BOOTS)red = red + 0.04;
+        else if(boots.getType() == Material.GOLD_BOOTS)red = red + 0.04;
+        else if(boots.getType() == Material.CHAINMAIL_BOOTS)red = red + 0.04;
+        else if(boots.getType() == Material.IRON_BOOTS)red = red + 0.08;
+        else if(boots.getType() == Material.DIAMOND_BOOTS)red = red + 0.12;
+
+        if(pants.getType() == Material.LEATHER_LEGGINGS)red = red + 0.08;
+        else if(pants.getType() == Material.GOLD_LEGGINGS)red = red + 0.12;
+        else if(pants.getType() == Material.CHAINMAIL_LEGGINGS)red = red + 0.16;
+        else if(pants.getType() == Material.IRON_LEGGINGS)red = red + 0.20;
+        else if(pants.getType() == Material.DIAMOND_LEGGINGS)red = red + 0.24;
+
+        if(chest.getType() == Material.LEATHER_CHESTPLATE)red = red + 0.12;
+        else if(chest.getType() == Material.GOLD_CHESTPLATE)red = red + 0.20;
+        else if(chest.getType() == Material.CHAINMAIL_CHESTPLATE)red = red + 0.20;
+        else if(chest.getType() == Material.IRON_CHESTPLATE)red = red + 0.24;
+        else if(chest.getType() == Material.DIAMOND_CHESTPLATE)red = red + 0.32;
+
+        return red;
+    }
+
+    private double getDamage(Entity entity) {
+        Material material = Material.AIR;
+
+        if (entity instanceof Player) {
+            Player player = (Player) entity; // BY PLAYER
+            ItemStack itemStack = player.getItemInHand();
+
+            // Если в руках ничего нет
+            if (isAir(itemStack)) {
+                return -1;
+            }
+        } else if (entity instanceof Projectile) {
+            material = Material.BOW; // BY ARROW TODO: Возможно придется в будущем заменить на Material.ARROW чтоб игроки не лупили простым луком
+        } else {
+            return -1; // WTF ?
         }
 
-        WeaponSet weaponSet = main.getWeaponConfig().getWeaponSet(itemStack.getType());
+        WeaponSet weaponSet = main.getWeaponConfig().getWeaponSet(material);
         if (weaponSet == null) { // Если такого оружия не найдено в конфиге
             return -1;
         }
@@ -67,7 +117,17 @@ public class MainListener implements Listener {
         return weaponSet.getDamage(1);
     }
 
-    private double getStrong(Player player) {
+    private double getStrong(Entity entity) {
+        Player player;
+
+        if (entity instanceof Player) {
+            player = (Player) entity;
+        } else if ((entity instanceof Projectile) && (((Projectile) entity).getShooter() instanceof Player)) {
+            player = (Player) ((Projectile) entity).getShooter();
+        } else {
+            return 0; // WTF ?
+        }
+
         PlayerInventory inventory = player.getInventory();
         ItemStack helmet = inventory.getHelmet();
         ItemStack chestplate = inventory.getChestplate();
@@ -137,7 +197,13 @@ public class MainListener implements Listener {
 
             double attackerDamage = getDamage(playerAttacker);
             if (attackerDamage >= 0) {
-                damage = attackerDamage;
+                damage += attackerDamage;
+            }
+
+            ItemStack itemInHand = playerAttacker.getItemInHand();
+            if (!isAir(itemInHand) && itemInHand.getDurability() != 0) {
+                itemInHand.setDurability((short) (itemInHand.getDurability() - 1)); // SAVE DURABILITY
+                playerAttacker.updateInventory();
             }
 
             stringBuilder.append("ATTACKER DAMAGE: ").append(damage).append('\n');
@@ -161,7 +227,23 @@ public class MainListener implements Listener {
 
         event.setDamage(damage);
 
-        main.getLogger().info(stringBuilder.toString());
+        //main.getLogger().info(stringBuilder.toString());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onShootBow(EntityShootBowEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
+
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+            ItemStack bow = event.getBow();
+            if (bow.getDurability() != 0) {
+                bow.setDurability((short) (bow.getDurability() - 1)); // SAVE DURABILITY
+                player.updateInventory();
+            }
+        }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
