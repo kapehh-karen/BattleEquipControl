@@ -48,6 +48,12 @@ public class MainConfig {
     Material.GOLD_SWORD
     Material.DIAMOND_SWORD
 
+    Material.WOOD_SPADE,
+    Material.STONE_SPADE,
+    Material.IRON_SPADE,
+    Material.GOLD_SPADE,
+    Material.DIAMOND_SPADE,
+
     Material.WOOD_AXE
     Material.STONE_AXE
     Material.IRON_AXE
@@ -114,6 +120,11 @@ public class MainConfig {
             Material.IRON_SWORD,
             Material.GOLD_SWORD,
             Material.DIAMOND_SWORD,
+            Material.WOOD_SPADE,
+            Material.STONE_SPADE,
+            Material.IRON_SPADE,
+            Material.GOLD_SPADE,
+            Material.DIAMOND_SPADE,
             Material.WOOD_AXE,
             Material.STONE_AXE,
             Material.IRON_AXE,
@@ -138,7 +149,6 @@ public class MainConfig {
                     evalString(eval, max)
                 );
                 armorConfig.addArmorSet(armorSet);
-                main.getLogger().info(armorSet.toString());
             } catch (ScriptException e) {
                 e.printStackTrace();
             }
@@ -154,7 +164,6 @@ public class MainConfig {
                     evalString(eval, max)
                 );
                 weaponConfig.addWeaponSet(weaponSet);
-                main.getLogger().info(weaponSet.toString());
             } catch (ScriptException e) {
                 e.printStackTrace();
             }

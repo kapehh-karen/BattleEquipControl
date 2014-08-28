@@ -80,6 +80,21 @@ WEAPONS:
   DIAMOND_SWORD:
     max_level: 10
     eval_level_damage: 9 + lvl * 2
+  WOOD_SPADE:
+    max_level: 10
+    eval_level_damage: 1 + lvl * 2
+  STONE_SPADE:
+    max_level: 10
+    eval_level_damage: 2 + lvl * 2
+  IRON_SPADE:
+    max_level: 10
+    eval_level_damage: 4 + lvl * 2
+  GOLD_SPADE:
+    max_level: 10
+    eval_level_damage: 7 + lvl * 2
+  DIAMOND_SPADE:
+    max_level: 10
+    eval_level_damage: 9 + lvl * 2
   WOOD_AXE:
     max_level: 10
     eval_level_damage: 2 + lvl * 2

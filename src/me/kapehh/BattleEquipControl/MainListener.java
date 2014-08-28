@@ -2,7 +2,10 @@ package me.kapehh.BattleEquipControl;
 
 import me.kapehh.BattleEquipControl.sets.ArmorSet;
 import me.kapehh.BattleEquipControl.sets.WeaponSet;
+import net.minecraft.server.v1_7_R3.NBTTagCompound;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_7_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -12,10 +15,17 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+
+import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.util.Arrays;
+import java.util.Map;
 
 /**
  * Created by Karen on 25.08.2014.
@@ -35,11 +45,6 @@ public class MainListener implements Listener {
         this.main = main;
     }
 
-    // TODO: REMOVE THIS
-    private void debugPrint() {
-
-    }
-
     private Player getFromEntity(Entity entity) {
         if (entity == null) {
             return null;
@@ -55,46 +60,10 @@ public class MainListener implements Listener {
         return (itemStack == null || itemStack.getType().equals(Material.AIR));
     }
 
-    public double getDamageReduced(Player player)
-    {
-        PlayerInventory inv = player.getInventory();
-        ItemStack boots = inv.getBoots();
-        ItemStack helmet = inv.getHelmet();
-        ItemStack chest = inv.getChestplate();
-        ItemStack pants = inv.getLeggings();
-        double red = 0.0;
-
-        if(helmet.getType() == Material.LEATHER_HELMET)red = red + 0.04;
-        else if(helmet.getType() == Material.GOLD_HELMET)red = red + 0.08;
-        else if(helmet.getType() == Material.CHAINMAIL_HELMET)red = red + 0.08;
-        else if(helmet.getType() == Material.IRON_HELMET)red = red + 0.08;
-        else if(helmet.getType() == Material.DIAMOND_HELMET)red = red + 0.12;
-
-        if(boots.getType() == Material.LEATHER_BOOTS)red = red + 0.04;
-        else if(boots.getType() == Material.GOLD_BOOTS)red = red + 0.04;
-        else if(boots.getType() == Material.CHAINMAIL_BOOTS)red = red + 0.04;
-        else if(boots.getType() == Material.IRON_BOOTS)red = red + 0.08;
-        else if(boots.getType() == Material.DIAMOND_BOOTS)red = red + 0.12;
-
-        if(pants.getType() == Material.LEATHER_LEGGINGS)red = red + 0.08;
-        else if(pants.getType() == Material.GOLD_LEGGINGS)red = red + 0.12;
-        else if(pants.getType() == Material.CHAINMAIL_LEGGINGS)red = red + 0.16;
-        else if(pants.getType() == Material.IRON_LEGGINGS)red = red + 0.20;
-        else if(pants.getType() == Material.DIAMOND_LEGGINGS)red = red + 0.24;
-
-        if(chest.getType() == Material.LEATHER_CHESTPLATE)red = red + 0.12;
-        else if(chest.getType() == Material.GOLD_CHESTPLATE)red = red + 0.20;
-        else if(chest.getType() == Material.CHAINMAIL_CHESTPLATE)red = red + 0.20;
-        else if(chest.getType() == Material.IRON_CHESTPLATE)red = red + 0.24;
-        else if(chest.getType() == Material.DIAMOND_CHESTPLATE)red = red + 0.32;
-
-        return red;
-    }
-
     private double getDamage(Entity entity) {
         Material material = Material.AIR;
 
-        if (entity instanceof Player) {
+        if (entity instanceof Player) { // Если атакующий - игрок
             Player player = (Player) entity; // BY PLAYER
             ItemStack itemStack = player.getItemInHand();
 
@@ -104,7 +73,7 @@ public class MainListener implements Listener {
             }
 
             material = itemStack.getType();
-        } else if (entity instanceof Projectile) {
+        } else if ((entity instanceof Projectile) && (((Projectile) entity).getShooter() instanceof Player)) { // Если атакующий это стрела и стрела выпущена игроком
             material = Material.BOW; // BY ARROW TODO: Возможно придется в будущем заменить на Material.ARROW чтоб игроки не лупили простым луком
         } else {
             return -1; // WTF ?
@@ -124,8 +93,8 @@ public class MainListener implements Listener {
 
         if (entity instanceof Player) {
             player = (Player) entity;
-        } else if ((entity instanceof Projectile) && (((Projectile) entity).getShooter() instanceof Player)) {
-            player = (Player) ((Projectile) entity).getShooter();
+        /*} else if ((entity instanceof Projectile) && (((Projectile) entity).getShooter() instanceof Player)) {
+            player = (Player) ((Projectile) entity).getShooter();*/
         } else {
             return 0; // WTF ?
         }
@@ -182,45 +151,29 @@ public class MainListener implements Listener {
 
         StringBuilder stringBuilder = new StringBuilder();
 
-        /*if (playerAttacker != null && playerAttacked != null) {
-            main.getLogger().info("EntityDamageByEntityEvent");
-            main.getLogger().info(playerAttacker.toString());
-            main.getLogger().info(playerAttacked.toString());
-            main.getLogger().info(String.valueOf(event.getDamage()));
-        }*/
-
-        // TODO: Remove stringBuilder
-        stringBuilder.append("CAUSE: ").append(event.getCause()).append('\n');
-        stringBuilder.append("ORIGINAL DAMAGE: ").append(damage).append('\n');
-
         // Если есть атакующий игрок
         if (playerAttacker != null) {
-            stringBuilder.append("ATTACKER: ").append(playerAttacker.toString()).append('\n');
+            stringBuilder.append("Original damage: ").append(damage).append('\n');
 
             double attackerDamage = getDamage(event.getDamager());
             if (attackerDamage >= 0) {
                 damage += attackerDamage;
             }
 
-            ItemStack itemInHand = playerAttacker.getItemInHand();
+            stringBuilder.append("Bonus damage: ").append(attackerDamage).append('\n');
+            /*ItemStack itemInHand = playerAttacker.getItemInHand();
             if (!isAir(itemInHand) && itemInHand.getDurability() != 0) {
-                //itemInHand.setDurability((short) (itemInHand.getDurability() - 1)); // SAVE DURABILITY
                 itemInHand.setDurability((short) 0);
                 playerAttacker.updateInventory();
-            }
-
-            stringBuilder.append("ATTACKER DAMAGE: ").append(damage).append('\n');
+            }*/
         }
 
         // Если есть игрок которого атакуют
         if (playerAttacked != null) {
-            stringBuilder.append("ATTACKED: ").append(playerAttacked.toString()).append('\n');
-            stringBuilder.append("ATTACKED HP: ").append(playerAttacked.getHealth()).append('\n');
-
             double attackedStrong = getStrong(event.getEntity());
             damage = damage - (damage * (attackedStrong / 100));
 
-            PlayerInventory inventory = playerAttacked.getInventory();
+            /*PlayerInventory inventory = playerAttacked.getInventory();
             ItemStack helmet = inventory.getHelmet();
             ItemStack chestplate = inventory.getChestplate();
             ItemStack leggins = inventory.getLeggings();
@@ -241,35 +194,20 @@ public class MainListener implements Listener {
                 boots.setDurability((short) 0);
                 inventory.setBoots(boots);
             }
-            /*if (!isAir(helmet) && helmet.getDurability() != 0) {
-                helmet.setDurability((short) (helmet.getDurability() - 1)); // SAVE DURABILITY
-                inventory.setHelmet(helmet);
-            }
-            if (!isAir(chestplate) && chestplate.getDurability() != 0) {
-                chestplate.setDurability((short) (chestplate.getDurability() - 1)); // SAVE DURABILITY
-                inventory.setChestplate(chestplate);
-            }
-            if (!isAir(leggins) && leggins.getDurability() != 0) {
-                leggins.setDurability((short) (leggins.getDurability() - 1)); // SAVE DURABILITY
-                inventory.setLeggings(leggins);
-            }
-            if (!isAir(boots) && boots.getDurability() != 0) {
-                boots.setDurability((short) (boots.getDurability() - 1)); // SAVE DURABILITY
-                inventory.setBoots(boots);
-            }*/
-            playerAttacked.updateInventory();
+            playerAttacked.updateInventory();*/
 
-            stringBuilder.append("ATTACKED STRONG: ").append(attackedStrong).append('\n');
+            stringBuilder.append("Armor opponent: ").append(attackedStrong).append('\n');
         }
 
-        stringBuilder.append("RESULT DAMAGE: ").append(damage).append('\n');
+        if (playerAttacker != null) {
+            stringBuilder.append("Result damage: ").append(damage);
+            playerAttacker.sendMessage(stringBuilder.toString());
+        }
 
         // Ну мало ли :DD
         if (damage < 0) damage = 0;
 
         event.setDamage(damage);
-
-        //main.getLogger().info(stringBuilder.toString());
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -278,16 +216,12 @@ public class MainListener implements Listener {
             return;
         }
 
-        if (event.getEntity() instanceof Player) {
+        /*if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
             ItemStack bow = event.getBow();
             bow.setDurability((short) 0);
-            /*if (bow.getDurability() != 0) {
-                bow.setDurability((short) (bow.getDurability() - 1)); // SAVE DURABILITY
-                player.updateInventory();
-            }*/
             player.updateInventory();
-        }
+        }*/
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -297,11 +231,89 @@ public class MainListener implements Listener {
         }
 
         Player playerAttacked = getFromEntity(event.getEntity()); // Того кого атакуют
+    }
 
-        /*if (playerAttacked != null) {
-            main.getLogger().info("EntityDamageEvent");
-            main.getLogger().info(playerAttacked.toString());
-            main.getLogger().info(String.valueOf(event.getDamage()));
-        }*/
+    // События свящанные с обновлением вещи
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onInteract(PlayerInteractEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
+
+        // Обновляем описание вещи
+        updateLore(event.getPlayer());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onCraft(CraftItemEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
+
+        // Обновляем описание вещи
+        //updateLore(event.getCurrentItem());
+
+        /*ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.setLore(Arrays.asList("One", ChatColor.BOLD + "NYAN"));
+        itemStack.setItemMeta(itemMeta);
+
+        net.minecraft.server.v1_7_R3.ItemStack nms = CraftItemStack.asNMSCopy(itemStack);
+        NBTTagCompound tag;
+        if(nms.tag != null)
+            tag = nms.tag;
+        else
+        {
+            nms.tag = new NBTTagCompound();
+            tag = nms.tag;
+        }
+        tag.setInt("MyKek", 546);
+        itemStack = CraftItemStack.asCraftMirror(nms);*/
+    }
+
+    private void updateLore(Player player) {
+        // TODO: Обновлять всего игрока (и броню), а не только один ItemStack в руке
+
+        // Обновили в руке
+        updateLore(player.getItemInHand());
+
+        // Обновляем броню
+        PlayerInventory inventory = player.getInventory();
+        ItemStack helmet = inventory.getHelmet();
+        ItemStack chestplate = inventory.getChestplate();
+        ItemStack leggins = inventory.getLeggings();
+        ItemStack boots = inventory.getBoots();
+
+        updateLore(helmet);
+        updateLore(chestplate);
+        updateLore(leggins);
+        updateLore(boots);
+
+        inventory.setHelmet(helmet);
+        inventory.setChestplate(chestplate);
+        inventory.setLeggings(leggins);
+        inventory.setBoots(boots);
+    }
+
+    private void updateLore(ItemStack itemStack) {
+        if (isAir(itemStack)) {
+            return;
+        }
+
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta.hasLore()) {
+            return;
+        }
+
+        WeaponSet weaponSet = main.getWeaponConfig().getWeaponSet(itemStack.getType());
+        ArmorSet armorSet = main.getArmorConfig().getArmorSet(itemStack.getType());
+        if (weaponSet != null || armorSet != null) {
+            String colorPreffix = ChatColor.RESET + "" + ChatColor.WHITE;
+            String secondLine = (weaponSet != null) ?
+                "Bonus damage: " + weaponSet.getDamage(1) :
+                "Bonus protection: " + armorSet.getStrong(1);
+            itemMeta.setLore(Arrays.asList(colorPreffix + "Level: 1", colorPreffix + secondLine));
+            itemStack.setItemMeta(itemMeta);
+        }
     }
 }
