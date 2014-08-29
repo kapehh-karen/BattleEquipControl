@@ -2,10 +2,8 @@ package me.kapehh.BattleEquipControl;
 
 import me.kapehh.BattleEquipControl.sets.ArmorSet;
 import me.kapehh.BattleEquipControl.sets.WeaponSet;
-import net.minecraft.server.v1_7_R3.NBTTagCompound;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_7_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -272,8 +270,6 @@ public class MainListener implements Listener {
     }
 
     private void updateLore(Player player) {
-        // TODO: Обновлять всего игрока (и броню), а не только один ItemStack в руке
-
         // Обновили в руке
         updateLore(player.getItemInHand());
 
