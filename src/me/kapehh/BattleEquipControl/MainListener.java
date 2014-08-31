@@ -35,6 +35,8 @@ public class MainListener implements Listener {
         TODO: У Лука учитывать силу натяжения (событие EntityShootBowEvent поле getForce)
 
         TODO: в EntityDamage у оружия уже имеется измененная прочность
+
+        TODO: Попробовать в net.minecraft.server.v1_7_R3.Item менять MaxDurability
      */
 
     Main main;

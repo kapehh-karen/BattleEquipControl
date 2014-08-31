@@ -1,10 +1,13 @@
 package me.kapehh.BattleEquipControl;
 
+import me.kapehh.BattleEquipControl.bukkit.NBTItemMeta;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.Random;
 
 /**
  * Created by Karen on 26.08.2014.
@@ -33,6 +36,18 @@ public class MainCommand implements CommandExecutor {
         } else if (args.length >= 1 && args[0].equals("meta")) {
             /*net.minecraft.server.v1_7_R3.ItemStack nms = CraftItemStack.asNMSCopy(itemStack);
             NBTTagCompound tag = nms.tag;*/
+
+            NBTItemMeta nbtItemMeta = new NBTItemMeta(itemStack);
+            if (nbtItemMeta.isValid()) {
+                if (nbtItemMeta.hasKey("BecTestLevel")) {
+                    player.sendMessage("Has BecTestLevel: " + nbtItemMeta.getInt("BecTestLevel"));
+                } else {
+                    Random random = new Random();
+                    int r = random.nextInt(1000);
+                    nbtItemMeta.setInt("BecTestLevel", r);
+                    player.sendMessage("Set BecTestLevel: " + r);
+                }
+            }
 
             /*CraftItemStack craftItemStack = (CraftItemStack) itemStack;
 
