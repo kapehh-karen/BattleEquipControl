@@ -1,6 +1,7 @@
 package me.kapehh.BattleEquipControl.sets;
 
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
 /**
  * Created by Karen on 26.08.2014.
  */
-public class WeaponSet {
+public class WeaponSet implements ISet {
     Material material = Material.AIR;
     Integer maxLevel = 1;
     List<Double> damageList = null;
@@ -40,5 +41,10 @@ public class WeaponSet {
                 ", maxLevel=" + maxLevel +
                 ", damageList=" + damageList +
                 '}';
+    }
+
+    @Override
+    public double getBonus(int level) {
+        return getDamage(level);
     }
 }

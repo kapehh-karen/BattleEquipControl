@@ -1,17 +1,22 @@
 package me.kapehh.BattleEquipControl;
 
+import me.kapehh.BattleEquipControl.helpers.WeaponUtil;
+import me.kapehh.BattleEquipControl.helpers.WeaponUtilBad;
 import me.kapehh.BattleEquipControl.sets.ArmorSet;
 import me.kapehh.BattleEquipControl.sets.WeaponSet;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -62,10 +67,11 @@ public class MainListener implements Listener {
 
     private double getDamage(Entity entity) {
         Material material = Material.AIR;
+        ItemStack itemStack = null;
 
         if (entity instanceof Player) { // Если атакующий - игрок
             Player player = (Player) entity; // BY PLAYER
-            ItemStack itemStack = player.getItemInHand();
+            itemStack = player.getItemInHand();
 
             // Если в руках ничего нет
             if (isAir(itemStack)) {
@@ -74,6 +80,7 @@ public class MainListener implements Listener {
 
             material = itemStack.getType();
         } else if ((entity instanceof Projectile) && (((Projectile) entity).getShooter() instanceof Player)) { // Если атакующий это стрела и стрела выпущена игроком
+            // TODO; Если стрела достанет игрока в то время, когда игрок сменит лук на другое оружие - будет жопа
             material = Material.BOW; // BY ARROW TODO: Возможно придется в будущем заменить на Material.ARROW чтоб игроки не лупили простым луком
         } else {
             return -1; // WTF ?
@@ -81,10 +88,14 @@ public class MainListener implements Listener {
 
         WeaponSet weaponSet = main.getWeaponConfig().getWeaponSet(material);
         if (weaponSet == null) { // Если такого оружия не найдено в конфиге
-            return -1;
+            return 0;
         }
 
         // Возвращаем дамаг в зависимости от уровня вещи TODO: Доделать уровень вещи
+        if (itemStack != null) {
+            WeaponUtilBad weaponUtilBad = new WeaponUtilBad(itemStack, weaponSet);
+            return weaponSet.getDamage(weaponUtilBad.getLevel());
+        }
         return weaponSet.getDamage(1);
     }
 
@@ -108,29 +119,33 @@ public class MainListener implements Listener {
 
         if (!isAir(helmet)) {
             ArmorSet armorSet = main.getArmorConfig().getArmorSet(helmet.getType());
+            WeaponUtilBad weaponUtilBad = new WeaponUtilBad(helmet, armorSet);
             if (armorSet != null) {
-                procents += armorSet.getStrong(1);
+                procents += armorSet.getStrong(weaponUtilBad.getLevel());
             }
         }
 
         if (!isAir(chestplate)) {
             ArmorSet armorSet = main.getArmorConfig().getArmorSet(chestplate.getType());
+            WeaponUtilBad weaponUtilBad = new WeaponUtilBad(chestplate, armorSet);
             if (armorSet != null) {
-                procents += armorSet.getStrong(1);
+                procents += armorSet.getStrong(weaponUtilBad.getLevel());
             }
         }
 
         if (!isAir(leggins)) {
             ArmorSet armorSet = main.getArmorConfig().getArmorSet(leggins.getType());
+            WeaponUtilBad weaponUtilBad = new WeaponUtilBad(leggins, armorSet);
             if (armorSet != null) {
-                procents += armorSet.getStrong(1);
+                procents += armorSet.getStrong(weaponUtilBad.getLevel());
             }
         }
 
         if (!isAir(boots)) {
             ArmorSet armorSet = main.getArmorConfig().getArmorSet(boots.getType());
+            WeaponUtilBad weaponUtilBad = new WeaponUtilBad(boots, armorSet);
             if (armorSet != null) {
-                procents += armorSet.getStrong(1);
+                procents += armorSet.getStrong(weaponUtilBad.getLevel());
             }
         }
 
@@ -156,45 +171,17 @@ public class MainListener implements Listener {
             stringBuilder.append("Original damage: ").append(damage).append('\n');
 
             double attackerDamage = getDamage(event.getDamager());
-            if (attackerDamage >= 0) {
+            if (attackerDamage > 0) {
                 damage += attackerDamage;
             }
 
             stringBuilder.append("Bonus damage: ").append(attackerDamage).append('\n');
-            /*ItemStack itemInHand = playerAttacker.getItemInHand();
-            if (!isAir(itemInHand) && itemInHand.getDurability() != 0) {
-                itemInHand.setDurability((short) 0);
-                playerAttacker.updateInventory();
-            }*/
         }
 
         // Если есть игрок которого атакуют
         if (playerAttacked != null) {
             double attackedStrong = getStrong(event.getEntity());
             damage = damage - (damage * (attackedStrong / 100));
-
-            /*PlayerInventory inventory = playerAttacked.getInventory();
-            ItemStack helmet = inventory.getHelmet();
-            ItemStack chestplate = inventory.getChestplate();
-            ItemStack leggins = inventory.getLeggings();
-            ItemStack boots = inventory.getBoots();
-            if (!isAir(helmet)) {
-                helmet.setDurability((short) 0);
-                inventory.setHelmet(helmet);
-            }
-            if (!isAir(chestplate)) {
-                chestplate.setDurability((short) 0);
-                inventory.setChestplate(chestplate);
-            }
-            if (!isAir(leggins)) {
-                leggins.setDurability((short) 0);
-                inventory.setLeggings(leggins);
-            }
-            if (!isAir(boots)) {
-                boots.setDurability((short) 0);
-                inventory.setBoots(boots);
-            }
-            playerAttacked.updateInventory();*/
 
             stringBuilder.append("Armor opponent: ").append(attackedStrong).append('\n');
         }
@@ -208,6 +195,14 @@ public class MainListener implements Listener {
         if (damage < 0) damage = 0;
 
         event.setDamage(damage);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onDeath(EntityDeathEvent event) {
+        Player player = event.getEntity().getKiller();
+        if (player != null) {
+            updateLore(player, true);
+        }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -233,7 +228,11 @@ public class MainListener implements Listener {
         Player playerAttacked = getFromEntity(event.getEntity()); // Того кого атакуют
     }
 
+    // ####################################
+    //
     // События свящанные с обновлением вещи
+    //
+    // ####################################
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onInteract(PlayerInteractEvent event) {
@@ -242,7 +241,7 @@ public class MainListener implements Listener {
         }
 
         // Обновляем описание вещи
-        updateLore(event.getPlayer());
+        updateLore(event.getPlayer(), false);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -271,9 +270,16 @@ public class MainListener implements Listener {
         itemStack = CraftItemStack.asCraftMirror(nms);*/
     }
 
-    private void updateLore(Player player) {
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onEnchant(PrepareItemEnchantEvent event) {
+        /*if (event.isCancelled()) {
+            event.setCancelled(!WeaponUtil.isEmptyEnchants(event.getItem()));
+        }*/
+    }
+
+    private void updateLore(Player player, boolean upgrade) {
         // Обновили в руке
-        updateLore(player.getItemInHand());
+        updateLore(player.getItemInHand(), upgrade);
 
         // Обновляем броню
         PlayerInventory inventory = player.getInventory();
@@ -282,10 +288,10 @@ public class MainListener implements Listener {
         ItemStack leggins = inventory.getLeggings();
         ItemStack boots = inventory.getBoots();
 
-        updateLore(helmet);
-        updateLore(chestplate);
-        updateLore(leggins);
-        updateLore(boots);
+        updateLore(helmet, upgrade);
+        updateLore(chestplate, upgrade);
+        updateLore(leggins, upgrade);
+        updateLore(boots, upgrade);
 
         inventory.setHelmet(helmet);
         inventory.setChestplate(chestplate);
@@ -293,25 +299,36 @@ public class MainListener implements Listener {
         inventory.setBoots(boots);
     }
 
-    private void updateLore(ItemStack itemStack) {
+    private void updateLore(ItemStack itemStack, boolean upgrade) {
         if (isAir(itemStack)) {
-            return;
-        }
-
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        if (itemMeta.hasLore()) {
             return;
         }
 
         WeaponSet weaponSet = main.getWeaponConfig().getWeaponSet(itemStack.getType());
         ArmorSet armorSet = main.getArmorConfig().getArmorSet(itemStack.getType());
+        if (!upgrade && itemStack.getItemMeta().hasLore()) {
+            return;
+        }
+
         if (weaponSet != null || armorSet != null) {
-            String colorPreffix = ChatColor.RESET + "" + ChatColor.WHITE;
+            /*String colorPreffix = ChatColor.RESET + "" + ChatColor.WHITE;
             String secondLine = (weaponSet != null) ?
                 "Bonus damage: " + weaponSet.getDamage(1) :
                 "Bonus protection: " + armorSet.getStrong(1);
             itemMeta.setLore(Arrays.asList(colorPreffix + "Level: 1", colorPreffix + secondLine));
-            itemStack.setItemMeta(itemMeta);
+            itemStack.setItemMeta(itemMeta);*/
+            WeaponUtilBad weaponUtilBad = new WeaponUtilBad(itemStack, (weaponSet != null) ? weaponSet : armorSet);
+            if (upgrade) {
+                // TODO: Доделать нормальные вычисления
+                int exp = weaponUtilBad.getExp() + 30;
+                if (exp < 100) {
+                    weaponUtilBad.setExp(exp);
+                } else {
+                    weaponUtilBad.setExp(1);
+                    weaponUtilBad.setLevel(weaponUtilBad.getLevel() + 1);
+                }
+            }
+            weaponUtilBad.save();
         }
     }
 }

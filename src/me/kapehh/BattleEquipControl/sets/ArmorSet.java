@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by Karen on 25.08.2014.
  */
-public class ArmorSet {
+public class ArmorSet implements ISet {
     Material material = Material.AIR;
     Integer maxLevel = 1;
     List<Double> strongList = null;
@@ -39,5 +39,10 @@ public class ArmorSet {
                 ", maxLevel=" + maxLevel +
                 ", strongList=" + strongList +
                 '}';
+    }
+
+    @Override
+    public double getBonus(int level) {
+        return getStrong(level);
     }
 }

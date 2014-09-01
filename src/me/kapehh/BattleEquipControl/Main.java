@@ -1,5 +1,6 @@
 package me.kapehh.BattleEquipControl;
 
+import me.kapehh.BattleEquipControl.bukkit.EnchantmentManager;
 import me.kapehh.BattleEquipControl.core.ArmorConfig;
 import me.kapehh.BattleEquipControl.core.WeaponConfig;
 import me.kapehh.main.pluginmanager.config.PluginConfig;
@@ -37,6 +38,8 @@ public class Main extends JavaPlugin {
         pluginConfig.addEventClasses(new MainConfig(this, pluginConfig));
         pluginConfig.setup();
         pluginConfig.loadData();
+
+        //EnchantmentManager.init();
     }
 
     @Override
