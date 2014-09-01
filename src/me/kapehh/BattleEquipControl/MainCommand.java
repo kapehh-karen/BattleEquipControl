@@ -13,6 +13,8 @@ import org.bukkit.inventory.meta.ItemMeta;
  */
 public class MainCommand implements CommandExecutor {
 
+    // TODO: Убрать эту команду вообще нахоой, или сделать что-то типа reload и забить
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if (!(sender instanceof Player)) {

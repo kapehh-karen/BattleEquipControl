@@ -319,6 +319,7 @@ public class MainListener implements Listener {
             itemStack.setItemMeta(itemMeta);*/
             WeaponUtilBad weaponUtilBad = new WeaponUtilBad(itemStack, (weaponSet != null) ? weaponSet : armorSet);
             if (upgrade) {
+                // TODO: Не забыть про лук, который игрок может сменить во время стрельбы
                 // TODO: Доделать нормальные вычисления
                 int exp = weaponUtilBad.getExp() + 30;
                 if (exp < 100) {
