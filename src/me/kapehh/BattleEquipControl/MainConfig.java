@@ -141,12 +141,14 @@ public class MainConfig {
 
         for (Material material : allArmors) {
             int max = cfg.getInt("ARMOR." + material.toString() + ".max_level", 1);
-            String eval = cfg.getString("ARMOR." + material.toString() + ".eval_level_strong", "0");
+            String evalProtect = cfg.getString("ARMOR." + material.toString() + ".eval_level_strong", "0");
+            String evalExp = cfg.getString("ARMOR." + material.toString() + ".eval_exp", "0");
             try {
                 ArmorSet armorSet = new ArmorSet(
                     material,
                     max,
-                    evalString(eval, max)
+                    evalString(evalProtect, max),
+                    evalString(evalExp, max)
                 );
                 armorConfig.addArmorSet(armorSet);
             } catch (ScriptException e) {
@@ -156,12 +158,14 @@ public class MainConfig {
 
         for (Material material : allWeapons) {
             int max = cfg.getInt("WEAPONS." + material.toString() + ".max_level", 1);
-            String eval = cfg.getString("WEAPONS." + material.toString() + ".eval_level_damage", "0");
+            String evalDamage = cfg.getString("WEAPONS." + material.toString() + ".eval_level_damage", "0");
+            String evalExp = cfg.getString("WEAPONS." + material.toString() + ".eval_exp", "0");
             try {
                 WeaponSet weaponSet = new WeaponSet(
                     material,
                     max,
-                    evalString(eval, max)
+                    evalString(evalDamage, max),
+                    evalString(evalExp, max)
                 );
                 weaponConfig.addWeaponSet(weaponSet);
             } catch (ScriptException e) {

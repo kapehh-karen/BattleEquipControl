@@ -1,127 +1,168 @@
-# В формулах, переменная lvl заменяется на уровень оружия или брони
+# В формулах, переменная lvl заменяется на уровень оружия или брони. Диапазон [1, 2, ... N - 1, N]
 
 ARMOR:
   LEATHER_HELMET:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_strong: lvl * 0.1
   IRON_HELMET:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_strong: lvl * 0.2
   GOLD_HELMET:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_strong: lvl * 0.4
   DIAMOND_HELMET:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_strong: lvl * 0.5
   CHAINMAIL_HELMET:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_strong: lvl * 0.3
   LEATHER_CHESTPLATE:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_strong: lvl * 0.1
   IRON_CHESTPLATE:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_strong: lvl * 0.2
   GOLD_CHESTPLATE:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_strong: lvl * 0.4
   DIAMOND_CHESTPLATE:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_strong: lvl * 0.5
   CHAINMAIL_CHESTPLATE:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_strong: lvl * 0.3
   LEATHER_LEGGINGS:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_strong: lvl * 0.1
   IRON_LEGGINGS:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_strong: lvl * 0.2
   GOLD_LEGGINGS:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_strong: lvl * 0.4
   DIAMOND_LEGGINGS:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_strong: lvl * 0.5
   CHAINMAIL_LEGGINGS:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_strong: lvl * 0.3
   LEATHER_BOOTS:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_strong: lvl * 0.1
   IRON_BOOTS:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_strong: lvl * 0.2
   GOLD_BOOTS:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_strong: lvl * 0.4
   DIAMOND_BOOTS:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_strong: lvl * 0.5
   CHAINMAIL_BOOTS:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_strong: lvl * 0.3
 WEAPONS:
   BOW:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_damage: 5 + lvl * 2
   WOOD_SWORD:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_damage: 1 + lvl * 2
   STONE_SWORD:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_damage: 2 + lvl * 2
   IRON_SWORD:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_damage: 4 + lvl * 2
   GOLD_SWORD:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_damage: 7 + lvl * 2
   DIAMOND_SWORD:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_damage: 9 + lvl * 2
   WOOD_SPADE:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_damage: 1 + lvl * 2
   STONE_SPADE:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_damage: 2 + lvl * 2
   IRON_SPADE:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_damage: 4 + lvl * 2
   GOLD_SPADE:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_damage: 7 + lvl * 2
   DIAMOND_SPADE:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_damage: 9 + lvl * 2
   WOOD_AXE:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_damage: 2 + lvl * 2
   STONE_AXE:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_damage: 4 + lvl * 2
   IRON_AXE:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_damage: 6 + lvl * 2
   GOLD_AXE:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_damage: 8 + lvl * 2
   DIAMOND_AXE:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_damage: 10 + lvl * 2
   WOOD_PICKAXE:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_damage: 1 + lvl * 2
   STONE_PICKAXE:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_damage: 2 + lvl * 2
   IRON_PICKAXE:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_damage: 3 + lvl * 2
   GOLD_PICKAXE:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_damage: 4 + lvl * 2
   DIAMOND_PICKAXE:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_damage: 5 + lvl * 2

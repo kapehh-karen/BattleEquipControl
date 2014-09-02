@@ -33,7 +33,6 @@ public class NBTItemMeta {
     }
 
     private NBTTagCompound tag;
-    //private NBTTagList list;
 
     public NBTItemMeta(org.bukkit.inventory.ItemStack itemStack) {
         initialize();
@@ -48,14 +47,7 @@ public class NBTItemMeta {
             } else {
                 tag = new NBTTagCompound();
                 handle.tag = tag;
-                System.out.println("NO TAG");
             }
-            /*list = (NBTTagList) tag.get("AttributeModifiers");
-            if (list == null) {
-                list = new NBTTagList();
-                tag.set("AttributeModifiers", list);
-                System.out.println("NO ATTRIBUTES");
-            }*/
         } catch (Exception e) {
             e.printStackTrace();
         }

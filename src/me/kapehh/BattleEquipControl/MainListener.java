@@ -3,6 +3,7 @@ package me.kapehh.BattleEquipControl;
 import me.kapehh.BattleEquipControl.helpers.WeaponUtil;
 import me.kapehh.BattleEquipControl.helpers.WeaponUtilBad;
 import me.kapehh.BattleEquipControl.sets.ArmorSet;
+import me.kapehh.BattleEquipControl.sets.ISet;
 import me.kapehh.BattleEquipControl.sets.WeaponSet;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -311,21 +312,17 @@ public class MainListener implements Listener {
         }
 
         if (weaponSet != null || armorSet != null) {
-            /*String colorPreffix = ChatColor.RESET + "" + ChatColor.WHITE;
-            String secondLine = (weaponSet != null) ?
-                "Bonus damage: " + weaponSet.getDamage(1) :
-                "Bonus protection: " + armorSet.getStrong(1);
-            itemMeta.setLore(Arrays.asList(colorPreffix + "Level: 1", colorPreffix + secondLine));
-            itemStack.setItemMeta(itemMeta);*/
-            WeaponUtilBad weaponUtilBad = new WeaponUtilBad(itemStack, (weaponSet != null) ? weaponSet : armorSet);
+            ISet iSet = (weaponSet != null) ? weaponSet : armorSet;
+            WeaponUtilBad weaponUtilBad = new WeaponUtilBad(itemStack, iSet);
             if (upgrade) {
                 // TODO: Не забыть про лук, который игрок может сменить во время стрельбы
-                // TODO: Доделать нормальные вычисления
-                int exp = weaponUtilBad.getExp() + 30;
-                if (exp < 100) {
+                // TODO: Доделать нормальные вычисления, с таблицей опыта
+                int level = weaponUtilBad.getLevel();
+                int exp = weaponUtilBad.getExp() + 1; // increment exp
+                if (exp < iSet.getIExp(level)) {
                     weaponUtilBad.setExp(exp);
-                } else {
-                    weaponUtilBad.setExp(1);
+                } else if (level < iSet.getIMaxLevel()) {
+                    weaponUtilBad.setExp((int) (WeaponUtilBad.MIN_EXP + (exp - iSet.getIExp(level))));
                     weaponUtilBad.setLevel(weaponUtilBad.getLevel() + 1);
                 }
             }

@@ -1,9 +1,7 @@
 package me.kapehh.BattleEquipControl.helpers;
 
-import me.kapehh.BattleEquipControl.bukkit.EnchantmentManager;
 import me.kapehh.BattleEquipControl.sets.ISet;
 import org.bukkit.ChatColor;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -14,8 +12,10 @@ import java.util.List;
  * Created by Karen on 01.09.2014.
  */
 public class WeaponUtilBad {
-    private static final int CURRENT_VERSION = 2;
-    private static final String PREFFIX = ChatColor.RESET + "" + ChatColor.BOLD;
+    public static final int CURRENT_VERSION = 5; // TODO: После изменений менять текущую версию
+    public static final int MIN_LEVEL = 1;
+    public static final int MIN_EXP = 0;
+    public static final String PREFFIX = ChatColor.RESET + "" + ChatColor.BOLD;
 
     private ISet iSet;
     private ItemStack itemStack;
@@ -23,17 +23,6 @@ public class WeaponUtilBad {
     private int exp;
     private int level;
     private int version;
-
-    /*public static boolean isEmptyEnchants(ItemStack itemStack) {
-        for (Enchantment enchantment : itemStack.getEnchantments().keySet()) {
-            if (!enchantment.equals(EnchantmentManager.ENCHANT_VERSION) &&
-                    !enchantment.equals(EnchantmentManager.ENCHANT_LEVEL) &&
-                    !enchantment.equals(EnchantmentManager.ENCHANT_EXP)) {
-                return false;
-            }
-        }
-        return true;
-    }*/
 
     public WeaponUtilBad(ItemStack itemStack, ISet iSet) {
         this.iSet = iSet;
@@ -45,6 +34,19 @@ public class WeaponUtilBad {
         load();
     }
 
+    public String getBar() {
+        StringBuilder stringBuilder = new StringBuilder().append(PREFFIX).append('[');
+        int p = (int) (exp * 100 / iSet.getIExp(level));
+        for (int i = 1; i <= 10; i++, p -= 10) {
+            if (p > 10) {
+                stringBuilder.append(ChatColor.RED).append(ChatColor.BOLD).append('|');
+            } else {
+                stringBuilder.append(ChatColor.DARK_GRAY).append(ChatColor.BOLD).append('|');
+            }
+        }
+        return stringBuilder.append(PREFFIX).append(']').toString();
+    }
+
     public void load() {
         List<String> lore = itemMeta.getLore();
         if (lore.size() < 1) {
@@ -52,43 +54,34 @@ public class WeaponUtilBad {
             return;
         }
         String m = lore.get(0);
-        if (!m.matches("\\[\\d+,\\d+,\\d+\\]")) {
+        if (!m.matches(".*:\\d+,\\d+,\\d+")) {
             clear();
             return;
         }
-        String p[] = m.substring(1, m.length() - 1).split(",");
+        String p[] = m.substring(m.lastIndexOf(':') + 1).split(",");
         exp = Integer.parseInt(p[0]);
         level = Integer.parseInt(p[1]);
         version = Integer.parseInt(p[2]);
         if (version != CURRENT_VERSION) {
-            clear();
+            clear(); // TODO: Требуется наверно рекалькуляция
         }
-        /*version = itemStack.getEnchantmentLevel(EnchantmentManager.ENCHANT_VERSION);
-        level = itemStack.getEnchantmentLevel(EnchantmentManager.ENCHANT_LEVEL);
-        exp = itemStack.getEnchantmentLevel(EnchantmentManager.ENCHANT_EXP);*/
     }
 
     public void save() {
-        /*itemStack.addUnsafeEnchantment(EnchantmentManager.ENCHANT_VERSION, version);
-        itemStack.addUnsafeEnchantment(EnchantmentManager.ENCHANT_LEVEL, level);
-        itemStack.addUnsafeEnchantment(EnchantmentManager.ENCHANT_EXP, exp);*/
         List<String> lore = new ArrayList<String>();
-        lore.add(String.format("[%d,%d,%d]", exp, level, version));
-        printVals(lore);
+        lore.add(String.format("%s:%d,%d,%d", ChatColor.DARK_GRAY, exp, level, version));
+        lore.add(PREFFIX + "Level: " + level);
+        lore.add(PREFFIX + "Exp: " + getBar());
+        lore.add(PREFFIX + iSet.getIBonusName() + ": " + iSet.getIBonus(level));
+        itemMeta.setLore(lore);
+        itemStack.setItemMeta(itemMeta);
     }
 
     public void clear() {
-        exp = 1;
-        level = 1;
+        exp = MIN_EXP;
+        level = MIN_LEVEL;
         version = CURRENT_VERSION;
         save();
-    }
-
-    private void printVals(List<String> lore) {
-        lore.add(PREFFIX + "Level: " + level);
-        lore.add(PREFFIX + "Bonus: " + iSet.getBonus(level));
-        itemMeta.setLore(lore);
-        itemStack.setItemMeta(itemMeta);
     }
 
     public int getExp() {

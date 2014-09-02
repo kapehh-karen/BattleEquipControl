@@ -11,9 +11,11 @@ public class ArmorSet implements ISet {
     Material material = Material.AIR;
     Integer maxLevel = 1;
     List<Double> strongList = null;
+    List<Double> expList = null;
 
-    public ArmorSet(Material material, Integer maxLevel, List<Double> strongList) {
+    public ArmorSet(Material material, Integer maxLevel, List<Double> strongList, List<Double> expList) {
         this.strongList = strongList;
+        this.expList = expList;
         this.maxLevel = maxLevel;
         this.material = material;
     }
@@ -25,11 +27,39 @@ public class ArmorSet implements ISet {
     public double getStrong(int level) {
         if (level < 1) level = 1;
         if (level > maxLevel) level = maxLevel;
+        if (level > strongList.size()) return 0;
         return strongList.get(level - 1);
+    }
+
+    public double getExp(int level) {
+        if (level < 1) level = 1;
+        if (level > maxLevel) level = maxLevel;
+        if (level > expList.size()) return 0;
+        return expList.get(level - 1);
     }
 
     public int getMaxLevel() {
         return maxLevel;
+    }
+
+    @Override
+    public double getIBonus(int level) {
+        return getStrong(level);
+    }
+
+    @Override
+    public String getIBonusName() {
+        return "Protection";
+    }
+
+    @Override
+    public int getIMaxLevel() {
+        return maxLevel;
+    }
+
+    @Override
+    public double getIExp(int level) {
+        return getExp(level);
     }
 
     @Override
@@ -38,11 +68,7 @@ public class ArmorSet implements ISet {
                 "material=" + material +
                 ", maxLevel=" + maxLevel +
                 ", strongList=" + strongList +
+                ", expList=" + expList +
                 '}';
-    }
-
-    @Override
-    public double getBonus(int level) {
-        return getStrong(level);
     }
 }

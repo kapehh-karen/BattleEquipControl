@@ -32,7 +32,7 @@ public class Main extends JavaPlugin {
         }
 
         getServer().getPluginManager().registerEvents(new MainListener(this), this);
-        getCommand("battleequip").setExecutor(new MainCommand());
+        getCommand("battleequip").setExecutor(new MainCommand(this));
 
         PluginConfig pluginConfig = new PluginConfig(this);
         pluginConfig.addEventClasses(new MainConfig(this, pluginConfig));
