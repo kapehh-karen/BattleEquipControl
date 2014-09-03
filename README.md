@@ -5,12 +5,22 @@ BattleEquipControl
 
 <b>Конфиг:</b>
 <pre>
+MOBS:
+
+  . . .
+  
+  WOLF:
+    exp: 1
+  
+  . . .
+
 ARMOR:
     
   . . .
   
   LEATHER_HELMET:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_strong: lvl * 0.3
   
   . . .
@@ -21,19 +31,17 @@ WEAPONS:
   
   WOOD_SWORD:
     max_level: 10
+    eval_exp: Math.exp(lvl)
     eval_level_damage: 5 + lvl * 2
   
   . . .
   
 </pre>
 
-Блок ARMOR отвечает за доспех. Блок WEAPONS за оружие.
+Блок ARMOR отвечает за доспех. Блок WEAPONS за оружие. Блок MOBS за опыт от убийства мобов
 Каждый элемент блока имеет <code>max_level</code> - максимальный уровень предмета для этой вещи, и <code>eval_level_***</code> - вычисляемое выражение в котором lvl это текущий уровень предмета.
 
 <b>Временно в плагине:</b>
 <ul>
-<li>Команда <code>/bec</code> которая показывает текущее количество HP в цифрах</li>
-<li>Лук наносит одинаковый дамаг не зависимо от того как сильно натягивали тетиву</li>
-<li>Временно все эффекты повышающие дамаг не учитываются</li>
-<li>Уровень предметов не увеличивается</li>
+<li>Команда <code>/bec level N</code> качающая снаряжение ваше</li>
 </ul>
