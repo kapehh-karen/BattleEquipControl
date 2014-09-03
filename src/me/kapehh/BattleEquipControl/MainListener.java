@@ -4,13 +4,11 @@ import me.kapehh.BattleEquipControl.helpers.WeaponUtil;
 import me.kapehh.BattleEquipControl.helpers.WeaponUtilBad;
 import me.kapehh.BattleEquipControl.sets.ArmorSet;
 import me.kapehh.BattleEquipControl.sets.ISet;
+import me.kapehh.BattleEquipControl.sets.MobSet;
 import me.kapehh.BattleEquipControl.sets.WeaponSet;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -176,8 +174,6 @@ public class MainListener implements Listener {
                 damage += attackerDamage;
             }
 
-            playerAttacker.sendMessage(event.getEntity().toString());
-
             //stringBuilder.append("Bonus damage: ").append(attackerDamage).append('\n');
         }
 
@@ -204,7 +200,7 @@ public class MainListener implements Listener {
     public void onDeath(EntityDeathEvent event) {
         Player player = event.getEntity().getKiller();
         if (player != null) {
-            updateLore(player, true);
+            updateLore(player, true, event.getEntity().getType());
         }
     }
 
@@ -244,7 +240,7 @@ public class MainListener implements Listener {
         }
 
         // Обновляем описание вещи
-        updateLore(event.getPlayer(), false);
+        updateLore(event.getPlayer(), false, null);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -280,9 +276,9 @@ public class MainListener implements Listener {
         }*/
     }
 
-    private void updateLore(Player player, boolean upgrade) {
+    private void updateLore(Player player, boolean upgrade, EntityType entityType) {
         // Обновили в руке
-        updateLore(player.getItemInHand(), upgrade);
+        updateLore(player.getItemInHand(), upgrade, entityType);
 
         // Обновляем броню
         PlayerInventory inventory = player.getInventory();
@@ -291,10 +287,10 @@ public class MainListener implements Listener {
         ItemStack leggins = inventory.getLeggings();
         ItemStack boots = inventory.getBoots();
 
-        updateLore(helmet, upgrade);
-        updateLore(chestplate, upgrade);
-        updateLore(leggins, upgrade);
-        updateLore(boots, upgrade);
+        updateLore(helmet, upgrade, entityType);
+        updateLore(chestplate, upgrade, entityType);
+        updateLore(leggins, upgrade, entityType);
+        updateLore(boots, upgrade, entityType);
 
         inventory.setHelmet(helmet);
         inventory.setChestplate(chestplate);
@@ -302,7 +298,7 @@ public class MainListener implements Listener {
         inventory.setBoots(boots);
     }
 
-    private void updateLore(ItemStack itemStack, boolean upgrade) {
+    private void updateLore(ItemStack itemStack, boolean upgrade, EntityType entityType) {
         if (isAir(itemStack)) {
             return;
         }
@@ -316,16 +312,19 @@ public class MainListener implements Listener {
         if (weaponSet != null || armorSet != null) {
             ISet iSet = (weaponSet != null) ? weaponSet : armorSet;
             WeaponUtilBad weaponUtilBad = new WeaponUtilBad(itemStack, iSet);
-            if (upgrade) {
+            if (upgrade && entityType != null) {
                 // TODO: Не забыть про лук, который игрок может сменить во время стрельбы
                 // TODO: Доделать нормальные вычисления, с таблицей опыта
-                int level = weaponUtilBad.getLevel();
-                int exp = weaponUtilBad.getExp() + 1; // increment exp
-                if (exp < iSet.getIExp(level)) {
-                    weaponUtilBad.setExp(exp);
-                } else if (level < iSet.getIMaxLevel()) {
-                    weaponUtilBad.setExp((int) (WeaponUtilBad.MIN_EXP + (exp - iSet.getIExp(level))));
-                    weaponUtilBad.setLevel(weaponUtilBad.getLevel() + 1);
+                MobSet mobSet = main.getMobConfig().getMobSet(entityType);
+                if (mobSet != null) {
+                    int level = weaponUtilBad.getLevel();
+                    int exp = weaponUtilBad.getExp() + mobSet.getExp(); // increment exp
+                    if (exp < iSet.getIExp(level)) {
+                        weaponUtilBad.setExp(exp);
+                    } else if (level < iSet.getIMaxLevel()) {
+                        weaponUtilBad.setExp((int) (WeaponUtilBad.MIN_EXP + (exp - iSet.getIExp(level))));
+                        weaponUtilBad.setLevel(weaponUtilBad.getLevel() + 1);
+                    }
                 }
             }
             weaponUtilBad.save();

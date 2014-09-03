@@ -2,6 +2,7 @@ package me.kapehh.BattleEquipControl;
 
 import me.kapehh.BattleEquipControl.bukkit.EnchantmentManager;
 import me.kapehh.BattleEquipControl.core.ArmorConfig;
+import me.kapehh.BattleEquipControl.core.MobConfig;
 import me.kapehh.BattleEquipControl.core.WeaponConfig;
 import me.kapehh.main.pluginmanager.config.PluginConfig;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -22,6 +23,7 @@ public class Main extends JavaPlugin {
 
     ArmorConfig armorConfig = new ArmorConfig();
     WeaponConfig weaponConfig = new WeaponConfig();
+    MobConfig mobConfig = new MobConfig();
 
     @Override
     public void onEnable() {
@@ -53,6 +55,10 @@ public class Main extends JavaPlugin {
 
     public WeaponConfig getWeaponConfig() {
         return weaponConfig;
+    }
+
+    public MobConfig getMobConfig() {
+        return mobConfig;
     }
 
     public ScriptEngine getScriptEngine() {

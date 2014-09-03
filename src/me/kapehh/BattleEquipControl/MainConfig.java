@@ -1,8 +1,10 @@
 package me.kapehh.BattleEquipControl;
 
 import me.kapehh.BattleEquipControl.core.ArmorConfig;
+import me.kapehh.BattleEquipControl.core.MobConfig;
 import me.kapehh.BattleEquipControl.core.WeaponConfig;
 import me.kapehh.BattleEquipControl.sets.ArmorSet;
+import me.kapehh.BattleEquipControl.sets.MobSet;
 import me.kapehh.BattleEquipControl.sets.WeaponSet;
 import me.kapehh.main.pluginmanager.config.EventPluginConfig;
 import me.kapehh.main.pluginmanager.config.EventType;
@@ -90,6 +92,7 @@ public class MainConfig {
         FileConfiguration cfg = pluginConfig.getConfig();
         ArmorConfig armorConfig = main.getArmorConfig();
         WeaponConfig weaponConfig = main.getWeaponConfig();
+        MobConfig mobConfig = main.getMobConfig();
 
         Material[] allArmors = new Material[] {
             Material.LEATHER_HELMET,
@@ -188,6 +191,11 @@ public class MainConfig {
             } catch (ScriptException e) {
                 e.printStackTrace();
             }
+        }
+
+        for (EntityType entityType : entityTypes) {
+            int exp = cfg.getInt("MOBS." + entityType.toString() + ".exp", 0);
+            mobConfig.addMobSet(new MobSet(entityType, exp));
         }
 
         main.getLogger().info("Finish read!");

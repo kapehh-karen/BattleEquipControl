@@ -24,4 +24,11 @@ public class ArmorConfig {
         }
         return null;
     }
+
+    @Override
+    public String toString() {
+        return "ArmorConfig{" +
+                "armorSets=" + armorSets +
+                '}';
+    }
 }

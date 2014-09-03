@@ -25,4 +25,11 @@ public class WeaponConfig {
         }
         return null;
     }
+
+    @Override
+    public String toString() {
+        return "WeaponConfig{" +
+                "weaponSets=" + weaponSets +
+                '}';
+    }
 }

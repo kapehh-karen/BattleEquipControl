@@ -33,8 +33,14 @@ public class MainCommand implements CommandExecutor {
             return true;
         }
 
+
         Player player = (Player) sender;
         //player.sendMessage(String.format("HP: %f from %f", player.getHealth(), player.getMaxHealth()));
+
+        if (!player.isOp()) {
+            player.sendMessage("Пацанчик, не в тот район попал.");
+            return true;
+        }
 
         ItemStack itemStack = player.getItemInHand();
         /*if (itemStack != null) {
@@ -49,8 +55,6 @@ public class MainCommand implements CommandExecutor {
         } else if (args.length >= 2 && args[0].equals("level")) {
             updateLore(player, Integer.parseInt(args[1]));
             player.sendMessage("Шалость удалась!");
-        } else if (args.length >= 1 && args[0].equals("meta")) {
-
         }
 
         return true;
