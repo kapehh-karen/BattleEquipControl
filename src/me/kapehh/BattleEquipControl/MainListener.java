@@ -165,18 +165,20 @@ public class MainListener implements Listener {
         Player playerAttacked = getFromEntity(event.getEntity()); // Того кого атакуют
         double damage = event.getDamage();
 
-        StringBuilder stringBuilder = new StringBuilder();
+        //StringBuilder stringBuilder = new StringBuilder();
 
         // Если есть атакующий игрок
         if (playerAttacker != null) {
-            stringBuilder.append("Original damage: ").append(damage).append('\n');
+            //stringBuilder.append("Original damage: ").append(damage).append('\n');
 
             double attackerDamage = getDamage(event.getDamager());
             if (attackerDamage > 0) {
                 damage += attackerDamage;
             }
 
-            stringBuilder.append("Bonus damage: ").append(attackerDamage).append('\n');
+            playerAttacker.sendMessage(event.getEntity().toString());
+
+            //stringBuilder.append("Bonus damage: ").append(attackerDamage).append('\n');
         }
 
         // Если есть игрок которого атакуют
@@ -184,13 +186,13 @@ public class MainListener implements Listener {
             double attackedStrong = getStrong(event.getEntity());
             damage = damage - (damage * (attackedStrong / 100));
 
-            stringBuilder.append("Armor opponent: ").append(attackedStrong).append('\n');
+            //stringBuilder.append("Armor opponent: ").append(attackedStrong).append('\n');
         }
 
-        if (playerAttacker != null) {
+        /*if (playerAttacker != null) {
             stringBuilder.append("Result damage: ").append(damage);
             playerAttacker.sendMessage(stringBuilder.toString());
-        }
+        }*/
 
         // Ну мало ли :DD
         if (damage < 0) damage = 0;

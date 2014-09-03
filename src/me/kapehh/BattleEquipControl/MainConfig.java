@@ -9,6 +9,7 @@ import me.kapehh.main.pluginmanager.config.EventType;
 import me.kapehh.main.pluginmanager.config.PluginConfig;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.EntityType;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
@@ -135,6 +136,22 @@ public class MainConfig {
             Material.IRON_PICKAXE,
             Material.GOLD_PICKAXE,
             Material.DIAMOND_PICKAXE
+        };
+
+        EntityType[] entityTypes = new EntityType[] {
+            EntityType.WOLF,
+            EntityType.MAGMA_CUBE,
+            EntityType.BLAZE,
+            EntityType.WITCH,
+            EntityType.CAVE_SPIDER,
+            EntityType.ENDERMAN,
+            EntityType.PIG_ZOMBIE,
+            EntityType.GHAST,
+            EntityType.SLIME,
+            EntityType.ZOMBIE,
+            EntityType.SPIDER,
+            EntityType.SKELETON,
+            EntityType.CREEPER
         };
 
         main.getLogger().info("Start read config!");
