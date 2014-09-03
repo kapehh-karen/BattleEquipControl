@@ -142,6 +142,7 @@ public class MainConfig {
         };
 
         EntityType[] entityTypes = new EntityType[] {
+            EntityType.PLAYER,
             EntityType.WOLF,
             EntityType.MAGMA_CUBE,
             EntityType.BLAZE,

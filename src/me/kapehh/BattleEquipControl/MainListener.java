@@ -314,7 +314,6 @@ public class MainListener implements Listener {
             WeaponUtilBad weaponUtilBad = new WeaponUtilBad(itemStack, iSet);
             if (upgrade && entityType != null) {
                 // TODO: Не забыть про лук, который игрок может сменить во время стрельбы
-                // TODO: Доделать нормальные вычисления, с таблицей опыта
                 MobSet mobSet = main.getMobConfig().getMobSet(entityType);
                 if (mobSet != null) {
                     int level = weaponUtilBad.getLevel();
