@@ -94,6 +94,8 @@ public class MainConfig {
         WeaponConfig weaponConfig = main.getWeaponConfig();
         MobConfig mobConfig = main.getMobConfig();
 
+        // TODO: Сделать загрузку по keySet из конфига
+
         Material[] allArmors = new Material[] {
             Material.LEATHER_HELMET,
             Material.IRON_HELMET,
@@ -155,7 +157,8 @@ public class MainConfig {
             EntityType.ZOMBIE,
             EntityType.SPIDER,
             EntityType.SKELETON,
-            EntityType.CREEPER
+            EntityType.CREEPER,
+            EntityType.ENDER_DRAGON
         };
 
         main.getLogger().info("Start read config!");

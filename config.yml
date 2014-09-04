@@ -28,6 +28,8 @@ MOBS:
         exp: 2
     CREEPER:
         exp: 3
+    ENDER_DRAGON:
+        exp: 100
 ARMOR:
     LEATHER_HELMET:
         max_level: 10

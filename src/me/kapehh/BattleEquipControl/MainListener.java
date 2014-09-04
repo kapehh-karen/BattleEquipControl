@@ -314,17 +314,23 @@ public class MainListener implements Listener {
             WeaponUtilBad weaponUtilBad = new WeaponUtilBad(itemStack, iSet);
             if (upgrade && entityType != null) {
                 // TODO: Не забыть про лук, который игрок может сменить во время стрельбы
-                // TODO: Не забыть в цикле увеличивать лвл, чтоб если опыт перевалил за уровень, то уровень бы корректно подсчитался
                 MobSet mobSet = main.getMobConfig().getMobSet(entityType);
                 if (mobSet != null) {
                     int level = weaponUtilBad.getLevel();
                     int exp = weaponUtilBad.getExp() + mobSet.getExp(); // increment exp
-                    if (exp < iSet.getIExp(level)) {
-                        weaponUtilBad.setExp(exp);
-                    } else if (level < iSet.getIMaxLevel()) {
-                        weaponUtilBad.setExp((int) (WeaponUtilBad.MIN_EXP + (exp - iSet.getIExp(level))));
-                        weaponUtilBad.setLevel(weaponUtilBad.getLevel() + 1);
-                    }
+                    do {
+                        if (exp < iSet.getIExp(level)) {
+                            weaponUtilBad.setExp(exp);
+                        } else if (level < iSet.getIMaxLevel()) {
+                            exp = (int) (WeaponUtilBad.MIN_EXP + (exp - iSet.getIExp(level)));
+                            level++;
+                            weaponUtilBad.setExp(exp);
+                            weaponUtilBad.setLevel(level);
+                        } else {
+                            weaponUtilBad.setExp((int) iSet.getIExp(level));
+                            break;
+                        }
+                    } while(exp >= iSet.getIExp(level));
                 }
             }
             weaponUtilBad.save();
