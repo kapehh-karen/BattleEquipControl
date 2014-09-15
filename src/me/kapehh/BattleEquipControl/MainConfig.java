@@ -82,7 +82,12 @@ public class MainConfig {
         ScriptEngine scriptEngine = main.getScriptEngine();
         for (int i = 1; i <= max; i++) {
             scriptEngine.put("lvl", i);
-            doubles.add((Double) scriptEngine.eval(eval));
+            Object ret = scriptEngine.eval(eval);
+            if (ret instanceof Double)
+                doubles.add((Double) ret);
+            else if (ret instanceof Integer)
+                doubles.add((double) (Integer) ret);
+            //doubles.add((Double) scriptEngine.eval(eval));
         }
         return doubles;
     }
@@ -135,12 +140,7 @@ public class MainConfig {
             Material.STONE_AXE,
             Material.IRON_AXE,
             Material.GOLD_AXE,
-            Material.DIAMOND_AXE,
-            Material.WOOD_PICKAXE,
-            Material.STONE_PICKAXE,
-            Material.IRON_PICKAXE,
-            Material.GOLD_PICKAXE,
-            Material.DIAMOND_PICKAXE
+            Material.DIAMOND_AXE
         };
 
         EntityType[] entityTypes = new EntityType[] {

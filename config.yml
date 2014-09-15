@@ -176,23 +176,3 @@ WEAPONS:
         max_level: 10
         eval_exp: Math.exp(lvl)
         eval_level_damage: 10 + lvl * 2
-    WOOD_PICKAXE:
-        max_level: 10
-        eval_exp: Math.exp(lvl)
-        eval_level_damage: 1 + lvl * 2
-    STONE_PICKAXE:
-        max_level: 10
-        eval_exp: Math.exp(lvl)
-        eval_level_damage: 2 + lvl * 2
-    IRON_PICKAXE:
-        max_level: 10
-        eval_exp: Math.exp(lvl)
-        eval_level_damage: 3 + lvl * 2
-    GOLD_PICKAXE:
-        max_level: 10
-        eval_exp: Math.exp(lvl)
-        eval_level_damage: 4 + lvl * 2
-    DIAMOND_PICKAXE:
-        max_level: 10
-        eval_exp: Math.exp(lvl)
-        eval_level_damage: 5 + lvl * 2
