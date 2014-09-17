@@ -9,16 +9,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
+import java.util.Random;
 
 /**
  * Created by Karen on 25.08.2014.
  */
 public class Main extends JavaPlugin {
-    /*
-    TODO: Определиться с экспой оружию, за что её давать?
-    TODO: Определить с прочностью. Если задавать свою, то в событие крафта прописывать прочность оружию
-     */
-
     ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("JavaScript");
 
     ArmorConfig armorConfig = new ArmorConfig();

@@ -28,18 +28,14 @@ import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by Karen on 25.08.2014.
  */
 public class MainListener implements Listener {
     /*
-        TODO: Вычислять строку формулы для Экспы/Дамага/Защиты при инициализации для всех левелов сразу
-
         TODO: У Лука учитывать силу натяжения (событие EntityShootBowEvent поле getForce)
-
-        TODO: в EntityDamage у оружия уже имеется измененная прочность
-
         TODO: Попробовать в net.minecraft.server.v1_7_R3.Item менять MaxDurability
      */
 
@@ -277,8 +273,10 @@ public class MainListener implements Listener {
     }
 
     private void updateLore(Player player, boolean upgrade, EntityType entityType) {
+        int indexItem = upgrade ? randInt(1, 5) : 0;
+
         // Обновили в руке
-        updateLore(player.getItemInHand(), upgrade, entityType);
+        updateLore(player.getItemInHand(), upgrade && (indexItem == 1), entityType);
 
         // Обновляем броню
         PlayerInventory inventory = player.getInventory();
@@ -287,10 +285,10 @@ public class MainListener implements Listener {
         ItemStack leggins = inventory.getLeggings();
         ItemStack boots = inventory.getBoots();
 
-        updateLore(helmet, upgrade, entityType);
-        updateLore(chestplate, upgrade, entityType);
-        updateLore(leggins, upgrade, entityType);
-        updateLore(boots, upgrade, entityType);
+        updateLore(helmet, upgrade && (indexItem == 2), entityType);
+        updateLore(chestplate, upgrade && (indexItem == 3), entityType);
+        updateLore(leggins, upgrade && (indexItem == 4), entityType);
+        updateLore(boots, upgrade && (indexItem == 5), entityType);
 
         inventory.setHelmet(helmet);
         inventory.setChestplate(chestplate);
@@ -335,5 +333,10 @@ public class MainListener implements Listener {
             }
             weaponUtilBad.save();
         }
+    }
+
+    private int randInt(int min, int max) {
+        Random rand = new Random();
+        return rand.nextInt((max - min) + 1) + min;
     }
 }

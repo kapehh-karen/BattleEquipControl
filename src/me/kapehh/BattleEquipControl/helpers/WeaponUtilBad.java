@@ -12,10 +12,10 @@ import java.util.List;
  * Created by Karen on 01.09.2014.
  */
 public class WeaponUtilBad {
-    public static final int CURRENT_VERSION = 5; // TODO: После изменений менять текущую версию
+    public static final int CURRENT_VERSION = 6; // TODO: После изменений менять текущую версию
     public static final int MIN_LEVEL = 1;
     public static final int MIN_EXP = 0;
-    public static final String PREFFIX = ChatColor.RESET + "" + ChatColor.BOLD;
+    public static final String PREFFIX = ChatColor.RESET + "";
 
     private ISet iSet;
     private ItemStack itemStack;
@@ -69,7 +69,7 @@ public class WeaponUtilBad {
 
     public void save() {
         List<String> lore = new ArrayList<String>();
-        lore.add(String.format("%s:%d,%d,%d", ChatColor.DARK_GRAY, exp, level, version));
+        lore.add(String.format("%s:%d,%d,%d", ChatColor.BLACK, exp, level, version));
         lore.add(PREFFIX + "Level: " + level);
         lore.add(PREFFIX + "Exp: " + getBar());
         lore.add(PREFFIX + iSet.getIBonusName() + ": " + iSet.getIBonus(level));
