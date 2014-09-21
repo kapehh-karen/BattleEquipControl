@@ -86,7 +86,7 @@ public class MainListener implements Listener {
             return 0;
         }
 
-        // Возвращаем дамаг в зависимости от уровня вещи TODO: Доделать уровень вещи
+        // Возвращаем дамаг в зависимости от уровня вещи
         if (itemStack != null) {
             WeaponUtilBad weaponUtilBad = new WeaponUtilBad(itemStack, weaponSet);
             return weaponSet.getDamage(weaponUtilBad.getLevel());
@@ -114,32 +114,32 @@ public class MainListener implements Listener {
 
         if (!isAir(helmet)) {
             ArmorSet armorSet = main.getArmorConfig().getArmorSet(helmet.getType());
-            WeaponUtilBad weaponUtilBad = new WeaponUtilBad(helmet, armorSet);
             if (armorSet != null) {
+                WeaponUtilBad weaponUtilBad = new WeaponUtilBad(helmet, armorSet);
                 procents += armorSet.getStrong(weaponUtilBad.getLevel());
             }
         }
 
         if (!isAir(chestplate)) {
             ArmorSet armorSet = main.getArmorConfig().getArmorSet(chestplate.getType());
-            WeaponUtilBad weaponUtilBad = new WeaponUtilBad(chestplate, armorSet);
             if (armorSet != null) {
+                WeaponUtilBad weaponUtilBad = new WeaponUtilBad(chestplate, armorSet);
                 procents += armorSet.getStrong(weaponUtilBad.getLevel());
             }
         }
 
         if (!isAir(leggins)) {
             ArmorSet armorSet = main.getArmorConfig().getArmorSet(leggins.getType());
-            WeaponUtilBad weaponUtilBad = new WeaponUtilBad(leggins, armorSet);
             if (armorSet != null) {
+                WeaponUtilBad weaponUtilBad = new WeaponUtilBad(leggins, armorSet);
                 procents += armorSet.getStrong(weaponUtilBad.getLevel());
             }
         }
 
         if (!isAir(boots)) {
             ArmorSet armorSet = main.getArmorConfig().getArmorSet(boots.getType());
-            WeaponUtilBad weaponUtilBad = new WeaponUtilBad(boots, armorSet);
             if (armorSet != null) {
+                WeaponUtilBad weaponUtilBad = new WeaponUtilBad(boots, armorSet);
                 procents += armorSet.getStrong(weaponUtilBad.getLevel());
             }
         }
@@ -275,9 +275,9 @@ public class MainListener implements Listener {
     private void updateLore(Player player, boolean upgrade, EntityType entityType) {
         int indexItem = upgrade ? randInt(1, 5) : 0;
 
-        // Обновили в руке
-        updateLore(player.getItemInHand(), upgrade && (indexItem == 1), entityType);
-
+        // Обновляем в руке
+        ItemStack item = player.getItemInHand();
+        
         // Обновляем броню
         PlayerInventory inventory = player.getInventory();
         ItemStack helmet = inventory.getHelmet();
@@ -285,6 +285,22 @@ public class MainListener implements Listener {
         ItemStack leggins = inventory.getLeggings();
         ItemStack boots = inventory.getBoots();
 
+        if (upgrade && (item != null || helmet != null || chestplate != null || leggins != null || boots != null)) {
+            boolean hehe;
+            do {
+                hehe =  (item == null && indexItem == 1) ||
+                        (helmet == null && indexItem == 2) ||
+                        (chestplate == null && indexItem == 3) ||
+                        (leggins == null && indexItem == 4) ||
+                        (boots == null && indexItem == 5);
+                if (hehe) {
+                    indexItem++;
+                    if (indexItem > 5) indexItem = 1;
+                }
+            } while(hehe);
+        }
+        
+        updateLore(item, upgrade && (indexItem == 1), entityType);
         updateLore(helmet, upgrade && (indexItem == 2), entityType);
         updateLore(chestplate, upgrade && (indexItem == 3), entityType);
         updateLore(leggins, upgrade && (indexItem == 4), entityType);

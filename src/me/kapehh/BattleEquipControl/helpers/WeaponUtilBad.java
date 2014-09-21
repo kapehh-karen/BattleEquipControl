@@ -70,9 +70,12 @@ public class WeaponUtilBad {
     public void save() {
         List<String> lore = new ArrayList<String>();
         lore.add(String.format("%s:%d,%d,%d", ChatColor.BLACK, exp, level, version));
+
+        double bonus = ((long) (iSet.getIBonus(level) * 100)) / 100.0;
         lore.add(PREFFIX + "Level: " + level);
         lore.add(PREFFIX + "Exp: " + getBar());
-        lore.add(PREFFIX + iSet.getIBonusName() + ": " + iSet.getIBonus(level));
+        lore.add(PREFFIX + iSet.getIBonusName() + ": " + bonus);
+
         itemMeta.setLore(lore);
         itemStack.setItemMeta(itemMeta);
     }
