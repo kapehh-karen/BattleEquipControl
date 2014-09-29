@@ -2,6 +2,7 @@ package me.kapehh.BattleEquipControl;
 
 import me.kapehh.BattleEquipControl.core.ArmorConfig;
 import me.kapehh.BattleEquipControl.core.MobConfig;
+import me.kapehh.BattleEquipControl.core.NodamageConfig;
 import me.kapehh.BattleEquipControl.core.WeaponConfig;
 import me.kapehh.BattleEquipControl.sets.ArmorSet;
 import me.kapehh.BattleEquipControl.sets.MobSet;
@@ -98,6 +99,7 @@ public class MainConfig {
         ArmorConfig armorConfig = main.getArmorConfig();
         WeaponConfig weaponConfig = main.getWeaponConfig();
         MobConfig mobConfig = main.getMobConfig();
+        NodamageConfig nodamageConfig = main.getNodamageConfig();
 
         // TODO: Сделать загрузку по keySet из конфига
 
@@ -200,6 +202,11 @@ public class MainConfig {
         for (EntityType entityType : entityTypes) {
             int exp = cfg.getInt("MOBS." + entityType.toString() + ".exp", 0);
             mobConfig.addMobSet(new MobSet(entityType, exp));
+        }
+
+        List<String> nodamage = cfg.getStringList("NODAMAGE");
+        for (String nodmg : nodamage) {
+            nodamageConfig.addMaterial(Material.valueOf(nodmg));
         }
 
         main.getLogger().info("Finish read!");

@@ -176,3 +176,4 @@ WEAPONS:
         max_level: 10
         eval_exp: Math.exp(lvl)
         eval_level_damage: 10 + lvl * 2
+NODAMAGE: [FISHING_ROD, STICK]

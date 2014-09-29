@@ -1,5 +1,6 @@
 package me.kapehh.BattleEquipControl;
 
+import me.kapehh.BattleEquipControl.core.NodamageConfig;
 import me.kapehh.BattleEquipControl.helpers.WeaponUtil;
 import me.kapehh.BattleEquipControl.helpers.WeaponUtilBad;
 import me.kapehh.BattleEquipControl.sets.ArmorSet;
@@ -61,7 +62,7 @@ public class MainListener implements Listener {
     }
 
     private double getDamage(Entity entity) {
-        Material material = Material.AIR;
+        Material material;
         ItemStack itemStack = null;
 
         if (entity instanceof Player) { // Если атакующий - игрок
@@ -74,11 +75,19 @@ public class MainListener implements Listener {
             }
 
             material = itemStack.getType();
+            if (material.equals(Material.BOW)) {
+                return 0; // если игрок бьет луком, а им надо стрелять
+            }
         } else if ((entity instanceof Projectile) && (((Projectile) entity).getShooter() instanceof Player)) { // Если атакующий это стрела и стрела выпущена игроком
             // TODO; Если стрела достанет игрока в то время, когда игрок сменит лук на другое оружие - будет жопа
             material = Material.BOW; // BY ARROW TODO: Возможно придется в будущем заменить на Material.ARROW чтоб игроки не лупили простым луком
         } else {
-            return -1; // WTF ?
+            return 0; // WTF ?
+        }
+
+        NodamageConfig nodamageConfig = main.getNodamageConfig();
+        if (nodamageConfig.containsMaterial(material)) {
+            return -1; // Вещи которыми бить нельзя
         }
 
         WeaponSet weaponSet = main.getWeaponConfig().getWeaponSet(material);
@@ -168,6 +177,8 @@ public class MainListener implements Listener {
             double attackerDamage = getDamage(event.getDamager());
             if (attackerDamage > 0) {
                 damage += attackerDamage;
+            } else if (attackerDamage < 0) {
+                damage = 0;
             }
 
             //stringBuilder.append("Bonus damage: ").append(attackerDamage).append('\n');
@@ -225,7 +236,7 @@ public class MainListener implements Listener {
 
     // ####################################
     //
-    // События свящанные с обновлением вещи
+    // События связанные с обновлением вещи
     //
     // ####################################
 
@@ -300,11 +311,11 @@ public class MainListener implements Listener {
             } while(hehe);
         }
         
-        updateLore(item, upgrade && (indexItem == 1), entityType);
-        updateLore(helmet, upgrade && (indexItem == 2), entityType);
-        updateLore(chestplate, upgrade && (indexItem == 3), entityType);
-        updateLore(leggins, upgrade && (indexItem == 4), entityType);
-        updateLore(boots, upgrade && (indexItem == 5), entityType);
+        updateLore(player, item, upgrade && (indexItem == 1), entityType);
+        updateLore(player, helmet, upgrade && (indexItem == 2), entityType);
+        updateLore(player, chestplate, upgrade && (indexItem == 3), entityType);
+        updateLore(player, leggins, upgrade && (indexItem == 4), entityType);
+        updateLore(player, boots, upgrade && (indexItem == 5), entityType);
 
         inventory.setHelmet(helmet);
         inventory.setChestplate(chestplate);
@@ -312,20 +323,20 @@ public class MainListener implements Listener {
         inventory.setBoots(boots);
     }
 
-    private void updateLore(ItemStack itemStack, boolean upgrade, EntityType entityType) {
+    private void updateLore(Player player, ItemStack itemStack, boolean upgrade, EntityType entityType) {
         if (isAir(itemStack)) {
             return;
         }
 
         WeaponSet weaponSet = main.getWeaponConfig().getWeaponSet(itemStack.getType());
         ArmorSet armorSet = main.getArmorConfig().getArmorSet(itemStack.getType());
-        if (!upgrade && itemStack.getItemMeta().hasLore()) {
+        /*if (!upgrade && itemStack.getItemMeta().hasLore()) {
             return;
-        }
+        }*/
 
         if (weaponSet != null || armorSet != null) {
             ISet iSet = (weaponSet != null) ? weaponSet : armorSet;
-            WeaponUtilBad weaponUtilBad = new WeaponUtilBad(itemStack, iSet);
+            WeaponUtilBad weaponUtilBad = new WeaponUtilBad(itemStack, iSet, player);
             if (upgrade && entityType != null) {
                 // TODO: Не забыть про лук, который игрок может сменить во время стрельбы
                 MobSet mobSet = main.getMobConfig().getMobSet(entityType);
