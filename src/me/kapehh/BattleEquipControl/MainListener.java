@@ -62,11 +62,12 @@ public class MainListener implements Listener {
     }
 
     private double getDamage(Entity entity) {
+        Player player;
         Material material;
         ItemStack itemStack = null;
 
         if (entity instanceof Player) { // Если атакующий - игрок
-            Player player = (Player) entity; // BY PLAYER
+            player = (Player) entity; // BY PLAYER
             itemStack = player.getItemInHand();
 
             // Если в руках ничего нет
@@ -78,7 +79,9 @@ public class MainListener implements Listener {
             if (material.equals(Material.BOW)) {
                 return 0; // если игрок бьет луком, а им надо стрелять
             }
-        } else if ((entity instanceof Projectile) && (((Projectile) entity).getShooter() instanceof Player)) { // Если атакующий это стрела и стрела выпущена игроком
+        } else if ((entity instanceof Arrow) && (((Projectile) entity).getShooter() instanceof Player)) { // Если атакующий это стрела и стрела выпущена игроком
+            // Лол, удочка тоже идентифицируется как Projectile
+            player = (Player) ((Arrow) entity).getShooter();
             // TODO; Если стрела достанет игрока в то время, когда игрок сменит лук на другое оружие - будет жопа
             material = Material.BOW; // BY ARROW TODO: Возможно придется в будущем заменить на Material.ARROW чтоб игроки не лупили простым луком
         } else {
@@ -97,7 +100,7 @@ public class MainListener implements Listener {
 
         // Возвращаем дамаг в зависимости от уровня вещи
         if (itemStack != null) {
-            WeaponUtilBad weaponUtilBad = new WeaponUtilBad(itemStack, weaponSet);
+            WeaponUtilBad weaponUtilBad = new WeaponUtilBad(itemStack, weaponSet, player);
             return weaponSet.getDamage(weaponUtilBad.getLevel());
         }
         return weaponSet.getDamage(1);
@@ -124,7 +127,7 @@ public class MainListener implements Listener {
         if (!isAir(helmet)) {
             ArmorSet armorSet = main.getArmorConfig().getArmorSet(helmet.getType());
             if (armorSet != null) {
-                WeaponUtilBad weaponUtilBad = new WeaponUtilBad(helmet, armorSet);
+                WeaponUtilBad weaponUtilBad = new WeaponUtilBad(helmet, armorSet, player);
                 procents += armorSet.getStrong(weaponUtilBad.getLevel());
             }
         }
@@ -132,7 +135,7 @@ public class MainListener implements Listener {
         if (!isAir(chestplate)) {
             ArmorSet armorSet = main.getArmorConfig().getArmorSet(chestplate.getType());
             if (armorSet != null) {
-                WeaponUtilBad weaponUtilBad = new WeaponUtilBad(chestplate, armorSet);
+                WeaponUtilBad weaponUtilBad = new WeaponUtilBad(chestplate, armorSet, player);
                 procents += armorSet.getStrong(weaponUtilBad.getLevel());
             }
         }
@@ -140,7 +143,7 @@ public class MainListener implements Listener {
         if (!isAir(leggins)) {
             ArmorSet armorSet = main.getArmorConfig().getArmorSet(leggins.getType());
             if (armorSet != null) {
-                WeaponUtilBad weaponUtilBad = new WeaponUtilBad(leggins, armorSet);
+                WeaponUtilBad weaponUtilBad = new WeaponUtilBad(leggins, armorSet, player);
                 procents += armorSet.getStrong(weaponUtilBad.getLevel());
             }
         }
@@ -148,7 +151,7 @@ public class MainListener implements Listener {
         if (!isAir(boots)) {
             ArmorSet armorSet = main.getArmorConfig().getArmorSet(boots.getType());
             if (armorSet != null) {
-                WeaponUtilBad weaponUtilBad = new WeaponUtilBad(boots, armorSet);
+                WeaponUtilBad weaponUtilBad = new WeaponUtilBad(boots, armorSet, player);
                 procents += armorSet.getStrong(weaponUtilBad.getLevel());
             }
         }
@@ -168,38 +171,24 @@ public class MainListener implements Listener {
         Player playerAttacked = getFromEntity(event.getEntity()); // Того кого атакуют
         double damage = event.getDamage();
 
-        //StringBuilder stringBuilder = new StringBuilder();
-
         // Если есть атакующий игрок
         if (playerAttacker != null) {
-            //stringBuilder.append("Original damage: ").append(damage).append('\n');
-
             double attackerDamage = getDamage(event.getDamager());
             if (attackerDamage > 0) {
                 damage += attackerDamage;
             } else if (attackerDamage < 0) {
                 damage = 0;
             }
-
-            //stringBuilder.append("Bonus damage: ").append(attackerDamage).append('\n');
         }
 
         // Если есть игрок которого атакуют
         if (playerAttacked != null) {
             double attackedStrong = getStrong(event.getEntity());
             damage = damage - (damage * (attackedStrong / 100));
-
-            //stringBuilder.append("Armor opponent: ").append(attackedStrong).append('\n');
         }
-
-        /*if (playerAttacker != null) {
-            stringBuilder.append("Result damage: ").append(damage);
-            playerAttacker.sendMessage(stringBuilder.toString());
-        }*/
 
         // Ну мало ли :DD
         if (damage < 0) damage = 0;
-
         event.setDamage(damage);
     }
 
@@ -252,35 +241,12 @@ public class MainListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onCraft(CraftItemEvent event) {
-        if (event.isCancelled()) {
-            return;
-        }
 
-        // Обновляем описание вещи
-        //updateLore(event.getCurrentItem());
-
-        /*ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setLore(Arrays.asList("One", ChatColor.BOLD + "NYAN"));
-        itemStack.setItemMeta(itemMeta);
-
-        net.minecraft.server.v1_7_R3.ItemStack nms = CraftItemStack.asNMSCopy(itemStack);
-        NBTTagCompound tag;
-        if(nms.tag != null)
-            tag = nms.tag;
-        else
-        {
-            nms.tag = new NBTTagCompound();
-            tag = nms.tag;
-        }
-        tag.setInt("MyKek", 546);
-        itemStack = CraftItemStack.asCraftMirror(nms);*/
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onEnchant(PrepareItemEnchantEvent event) {
-        /*if (event.isCancelled()) {
-            event.setCancelled(!WeaponUtil.isEmptyEnchants(event.getItem()));
-        }*/
+
     }
 
     private void updateLore(Player player, boolean upgrade, EntityType entityType) {

@@ -98,7 +98,7 @@ public class MainCommand implements CommandExecutor {
 
         if (weaponSet != null || armorSet != null) {
             ISet iSet = (weaponSet != null) ? weaponSet : armorSet;
-            WeaponUtilBad weaponUtilBad = new WeaponUtilBad(itemStack, iSet);
+            WeaponUtilBad weaponUtilBad = new WeaponUtilBad(itemStack, iSet, null);
             weaponUtilBad.setExp(0);
             weaponUtilBad.setLevel(lvl);
             weaponUtilBad.save();

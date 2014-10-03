@@ -29,9 +29,9 @@ public class WeaponUtilBad {
     private int version;
     private String createdBy;
 
-    public WeaponUtilBad(ItemStack itemStack, ISet iSet) {
+    /*public WeaponUtilBad(ItemStack itemStack, ISet iSet) {
         this(itemStack, iSet, null);
-    }
+    }*/
 
     public WeaponUtilBad(ItemStack itemStack, ISet iSet, Player player) {
         this.iSet = iSet;
