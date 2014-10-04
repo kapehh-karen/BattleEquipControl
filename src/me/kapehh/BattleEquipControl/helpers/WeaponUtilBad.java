@@ -13,8 +13,7 @@ import java.util.List;
  * Created by Karen on 01.09.2014.
  */
 public class WeaponUtilBad {
-    public static final int PREV_VERSION = 6;
-    public static final int CURRENT_VERSION = 7;
+    public static final int CURRENT_VERSION = 8;
     public static final int MIN_LEVEL = 1;
     public static final int MIN_EXP = 0;
     public static final String PREFFIX = ChatColor.RESET + "";
@@ -57,39 +56,78 @@ public class WeaponUtilBad {
         return stringBuilder.append(PREFFIX).append(']').toString();
     }
 
+    private String getPlayerName() {
+        return (player != null) ? player.getName() : "-";
+    }
+
+    private void update(String m, String p[]) {
+        update(m, p, 0, false);
+    }
+
+    private void update(String m, String p[], int v, boolean simple_update) {
+        int ver = v;
+
+        if (!simple_update) {
+
+            if (m.matches(".*:\\d+,\\d+,\\d+") && (ver = Integer.parseInt(p[2])) == 6) { // обновление с 6 версии
+                exp = Integer.parseInt(p[0]);
+                level = Integer.parseInt(p[1]);
+            } else if (m.matches(".*:\\d+,\\d+,\\d+,\\w+") && (ver = Integer.parseInt(p[2])) == 7) { // обновление с 7 версии
+                exp = Integer.parseInt(p[0]);
+                level = Integer.parseInt(p[1]);
+                createdBy = p[3];
+            }
+
+        }
+
+        // без break, чтоб нормально обновить
+        switch (ver) {
+
+            case 6:
+                createdBy = getPlayerName();
+
+            case 7:
+                if (createdBy.equalsIgnoreCase("unknown")) {
+                    createdBy = getPlayerName();
+                }
+
+                break; // все, хватит с обновлениями
+
+            default:
+                clear();
+                return;
+
+        }
+
+        version = CURRENT_VERSION;
+    }
+
     public void load() {
         List<String> lore = itemMeta.getLore();
         if (lore.size() < 1) {
             clear();
             return;
         }
-        boolean needUpdate = false;
+
         String m = lore.get(0);
-        if (!m.matches(".*:\\d+,\\d+,\\d+,\\w+")) {
-            // Обновление с предыдущей версии
-            if (!m.matches(".*:\\d+,\\d+,\\d+")) {
-                // Если не получается сравнить даже строку шаблона, то в треш его!
-                clear();
-                return;
-            }
-            needUpdate = true;
+        if (m.indexOf(':') < 0) {
+            clear();
+            return;
         }
         String p[] = m.substring(m.lastIndexOf(':') + 1).split(",");
+
+        if (!m.matches(".*:\\d+,\\d+,\\d+,\\w+")) {
+            update(m, p);
+            return;
+        }
+
         exp = Integer.parseInt(p[0]);
         level = Integer.parseInt(p[1]);
         version = Integer.parseInt(p[2]);
-        if (needUpdate) {
-            createdBy = (player != null) ? player.getName() : "unknown";
-            if (version != PREV_VERSION) {
-                clear();
-            } else {
-                version = CURRENT_VERSION;
-            }
-        } else {
-            createdBy = p[3];
-            if (version != CURRENT_VERSION) {
-                clear();
-            }
+        createdBy = p[3];
+
+        if (version != CURRENT_VERSION) {
+            update(m, p, version, true);
         }
     }
 
@@ -111,7 +149,7 @@ public class WeaponUtilBad {
         exp = MIN_EXP;
         level = MIN_LEVEL;
         version = CURRENT_VERSION;
-        createdBy = (player != null) ? player.getName() : "unknown";
+        createdBy = getPlayerName();
         save();
     }
 
