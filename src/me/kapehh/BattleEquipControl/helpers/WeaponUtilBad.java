@@ -136,8 +136,8 @@ public class WeaponUtilBad {
         lore.add(String.format("%s:%d,%d,%d,%s", ChatColor.BLACK, exp, level, version, createdBy));
 
         double bonus = ((long) (iSet.getIBonus(level) * 100)) / 100.0;
-        lore.add(PREFFIX + "Level: " + level);
-        lore.add(PREFFIX + "Exp: " + getBar());
+        lore.add(PREFFIX + "Уровень: " + level);
+        lore.add(PREFFIX + "Опыт: " + getBar());
         lore.add(PREFFIX + iSet.getIBonusName() + ": " + bonus);
         lore.add(PREFFIX + ChatColor.GRAY + "" + ChatColor.ITALIC + "by " + createdBy);
 

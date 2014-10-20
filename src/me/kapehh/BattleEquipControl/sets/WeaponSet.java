@@ -51,7 +51,7 @@ public class WeaponSet implements ISet {
 
     @Override
     public String getIBonusName() {
-        return "Damage";
+        return "Урон";
     }
 
     @Override

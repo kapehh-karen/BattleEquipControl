@@ -49,7 +49,7 @@ public class ArmorSet implements ISet {
 
     @Override
     public String getIBonusName() {
-        return "Protection";
+        return "Защита";
     }
 
     @Override
