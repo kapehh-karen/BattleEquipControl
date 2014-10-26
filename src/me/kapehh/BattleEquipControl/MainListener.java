@@ -304,12 +304,18 @@ public class MainListener implements Listener {
                 ISet iSet = (weaponSet != null) ? weaponSet : armorSet;
                 WeaponUtilBad weaponUtilBad = new WeaponUtilBad(currentWeapon, iSet, player);
 
-                // TODO: Add chanceFailUpgrade
-                upgradeWeapon(weaponUtilBad, iSet, upgradeSet.getExp() * currentUpgrader.getAmount(), true);
-                contents[i] = currentWeapon;
-                inventory.clear();
+                if (randDouble(0, 100) > upgradeSet.getChanceFailUpgrade()) {
+                    int exp = upgradeSet.getExp() * currentUpgrader.getAmount();
+                    upgradeWeapon(weaponUtilBad, iSet, exp, true);
+                    player.sendMessage(ChatColor.GREEN + "Заточка успешно выполнена! Получено опыта: " + exp);
+                } else {
+                    weaponUtilBad.setExp(0);
+                    player.sendMessage(ChatColor.RED + "Заточка не удалась! Опыт был сброшен.");
+                }
 
                 weaponUtilBad.save();
+                contents[i] = currentWeapon;
+                inventory.clear();
                 player.getInventory().setContents(contents);
                 player.updateInventory();
             }

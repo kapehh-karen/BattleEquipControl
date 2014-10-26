@@ -105,11 +105,12 @@ public class MainConfig {
 
         int maxLevel = cfg.getInt("MAIN.max_level", 1);
         int maxLevelUpgrade = cfg.getInt("MAIN.max_level_upgrade", 1);
+        int singleMaxLevel = Math.max(maxLevel, maxLevelUpgrade);
         double chanceFailUpgrade = cfg.getDouble("MAIN.chance_fail_upgrade", 0.0);
         String evalExp = cfg.getString("MAIN.eval_exp", "1");
         List<Double> listExp;
         try {
-            listExp = evalString(evalExp, maxLevelUpgrade);
+            listExp = evalString(evalExp, singleMaxLevel);
         } catch (ScriptException e) {
             e.printStackTrace();
             return;
@@ -134,7 +135,7 @@ public class MainConfig {
                     Material.valueOf(key),
                     maxLevel,
                     maxLevelUpgrade,
-                    evalString(evalProtect, maxLevelUpgrade),
+                    evalString(evalProtect, singleMaxLevel),
                     listExp
                 );
                 armorConfig.addArmorSet(armorSet);
@@ -150,7 +151,7 @@ public class MainConfig {
                     Material.valueOf(key),
                     maxLevel,
                     maxLevelUpgrade,
-                    evalString(evalDamage, maxLevelUpgrade),
+                    evalString(evalDamage, singleMaxLevel),
                     listExp
                 );
                 weaponConfig.addWeaponSet(weaponSet);
