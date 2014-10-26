@@ -3,10 +3,7 @@ package me.kapehh.BattleEquipControl;
 import me.kapehh.BattleEquipControl.core.NodamageConfig;
 import me.kapehh.BattleEquipControl.helpers.WeaponUtil;
 import me.kapehh.BattleEquipControl.helpers.WeaponUtilBad;
-import me.kapehh.BattleEquipControl.sets.ArmorSet;
-import me.kapehh.BattleEquipControl.sets.ISet;
-import me.kapehh.BattleEquipControl.sets.MobSet;
-import me.kapehh.BattleEquipControl.sets.WeaponSet;
+import me.kapehh.BattleEquipControl.sets.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
@@ -18,8 +15,9 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -36,8 +34,7 @@ import java.util.Random;
  */
 public class MainListener implements Listener {
     /*
-        TODO: У Лука учитывать силу натяжения (событие EntityShootBowEvent поле getForce)
-        TODO: Попробовать в net.minecraft.server.v1_7_R3.Item менять MaxDurability
+     * TODO: У Лука учитывать силу натяжения (событие EntityShootBowEvent поле getForce)
      */
 
     Main main;
@@ -67,7 +64,7 @@ public class MainListener implements Listener {
         ItemStack itemStack = null;
 
         if (entity instanceof Player) { // Если атакующий - игрок
-            player = (Player) entity; // BY PLAYER
+            player = (Player) entity;
             itemStack = player.getItemInHand();
 
             // Если в руках ничего нет
@@ -79,13 +76,12 @@ public class MainListener implements Listener {
             if (material.equals(Material.BOW)) {
                 return 0; // если игрок бьет луком, а им надо стрелять
             }
-        } else if ((entity instanceof Arrow) && (((Projectile) entity).getShooter() instanceof Player)) { // Если атакующий это стрела и стрела выпущена игроком
-            // Лол, удочка тоже идентифицируется как Projectile
-            player = (Player) ((Arrow) entity).getShooter();
+        } else if ((entity instanceof Arrow) && (((Arrow) entity).getShooter() instanceof Player)) { // Если атакующий это стрела и стрела выпущена игроком
+            player = (Player) ((Arrow) entity).getShooter(); // Лол, удочка тоже идентифицируется как Projectile
             // TODO; Если стрела достанет игрока в то время, когда игрок сменит лук на другое оружие - будет жопа
             material = Material.BOW; // BY ARROW TODO: Возможно придется в будущем заменить на Material.ARROW чтоб игроки не лупили простым луком
         } else {
-            return 0; // WTF ?
+            return 0; // дамаг наносит не игрок
         }
 
         NodamageConfig nodamageConfig = main.getNodamageConfig();
@@ -111,10 +107,8 @@ public class MainListener implements Listener {
 
         if (entity instanceof Player) {
             player = (Player) entity;
-        /*} else if ((entity instanceof Projectile) && (((Projectile) entity).getShooter() instanceof Player)) {
-            player = (Player) ((Projectile) entity).getShooter();*/
         } else {
-            return 0; // WTF ?
+            return 0; // атакующий не игрок
         }
 
         PlayerInventory inventory = player.getInventory();
@@ -200,34 +194,124 @@ public class MainListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    // ####################################
+    //
+    // События связанные с обновлением вещи
+    //
+    // ####################################
+
+    /*@EventHandler(priority = EventPriority.LOWEST)
     public void onShootBow(EntityShootBowEvent event) {
         if (event.isCancelled()) {
             return;
         }
 
-        /*if (event.getEntity() instanceof Player) {
-            Player player = (Player) event.getEntity();
-            ItemStack bow = event.getBow();
-            bow.setDurability((short) 0);
-            player.updateInventory();
-        }*/
-    }
+        // event.getForce() - натяжение
+    }*/
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    /*@EventHandler(priority = EventPriority.LOWEST)
     public void onEntityDamageEvent(EntityDamageEvent event) {
         if (event.isCancelled()) {
             return;
         }
 
         Player playerAttacked = getFromEntity(event.getEntity()); // Того кого атакуют
+    }*/
+
+    /*@EventHandler(priority = EventPriority.LOWEST)
+    public void onCraft(CraftItemEvent event) {
+
     }
 
-    // ####################################
-    //
-    // События связанные с обновлением вещи
-    //
-    // ####################################
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onEnchant(PrepareItemEnchantEvent event) {
+
+    }*/
+
+    /*@EventHandler(priority = EventPriority.LOWEST)
+    public void onFurnaceBurnEvent(FurnaceBurnEvent event) {
+        String str = "";
+        str += event.getEventName() + "\r\n";
+        str += event.getBurnTime() + "\r\n";
+        str += event.getFuel().toString() + "\r\n";
+        str += event.getBlock().toString() + "\r\n";
+        System.out.println(str);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onFurnaceExtractEvent(FurnaceExtractEvent event) {
+        String str = "";
+        str += event.getEventName() + "\r\n";
+        str += event.getBlock().toString() + "\r\n";
+        str += event.getItemAmount() + "\r\n";
+        str += event.getItemType().toString() + "\r\n";
+        str += event.getPlayer().toString() + "\r\n";
+        System.out.println(str);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onFurnaceSmeltEvent(FurnaceSmeltEvent event) {
+        String str = "";
+        str += event.getEventName() + "\r\n";
+        str += event.getBlock().toString() + "\r\n";
+        str += event.getSource().toString() + "\r\n";
+        str += event.getResult().toString() + "\r\n";
+        System.out.println(str);
+    }*/
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onEvent(InventoryClickEvent event) {
+        AnvilInventory inventory;
+        if (event.getInventory() instanceof AnvilInventory) {
+            inventory = (AnvilInventory) event.getInventory();
+        } else {
+            // Если не наковальня - сразу нафиг
+            return;
+        }
+
+        // Если событие - положить. И слот для крафта.
+        if (event.getSlotType().equals(InventoryType.SlotType.RESULT) &&
+            /*(event.getAction().equals(InventoryAction.PLACE_ALL) || event.getAction().equals(InventoryAction.PLACE_ONE)) &&*/
+            (inventory.getItem(0) != null && inventory.getItem(1) != null)) {
+
+            ItemStack currentUpgrader = inventory.getItem(0) == null ? event.getCursor() : inventory.getItem(0);
+            ItemStack currentWeapon = inventory.getItem(1) == null ? event.getCursor() : inventory.getItem(1);
+
+            UpgradeSet upgradeSet = main.getUpgradeConfig().getUpgradeSet(currentUpgrader.getType());
+            WeaponSet weaponSet = main.getWeaponConfig().getWeaponSet(currentWeapon.getType());
+            ArmorSet armorSet = main.getArmorConfig().getArmorSet(currentWeapon.getType());
+
+            if (upgradeSet != null && (weaponSet != null || armorSet != null)) {
+                Player player = (Player) event.getWhoClicked();
+                ItemStack contents[] = player.getInventory().getContents();
+                boolean isFull = true;
+                int i = 0;
+
+                for (ItemStack item : contents) {
+                    if (item == null || item.getType().equals(Material.AIR)) {
+                        isFull = false;
+                        break;
+                    }
+                    i++;
+                }
+
+                if (isFull) {
+                    player.sendMessage("KOKOKO");
+                    return;
+                }
+
+                ISet iSet = (weaponSet != null) ? weaponSet : armorSet;
+                WeaponUtilBad weaponUtilBad = new WeaponUtilBad(currentWeapon, iSet, player);
+
+                upgradeWeapon(weaponUtilBad, iSet, upgradeSet.getExp() * currentUpgrader.getAmount(), true);
+                contents[i] = currentWeapon;
+                inventory.clear();
+
+                weaponUtilBad.save();
+                player.getInventory().setContents(contents);
+            }
+        }
+    }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onInteract(PlayerInteractEvent event) {
@@ -237,16 +321,6 @@ public class MainListener implements Listener {
 
         // Обновляем описание вещи
         updateLore(event.getPlayer(), false, null);
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onCraft(CraftItemEvent event) {
-
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onEnchant(PrepareItemEnchantEvent event) {
-
     }
 
     private void updateLore(Player player, boolean upgrade, EntityType entityType) {
@@ -296,9 +370,6 @@ public class MainListener implements Listener {
 
         WeaponSet weaponSet = main.getWeaponConfig().getWeaponSet(itemStack.getType());
         ArmorSet armorSet = main.getArmorConfig().getArmorSet(itemStack.getType());
-        /*if (!upgrade && itemStack.getItemMeta().hasLore()) {
-            return;
-        }*/
 
         if (weaponSet != null || armorSet != null) {
             ISet iSet = (weaponSet != null) ? weaponSet : armorSet;
@@ -307,25 +378,29 @@ public class MainListener implements Listener {
                 // TODO: Не забыть про лук, который игрок может сменить во время стрельбы
                 MobSet mobSet = main.getMobConfig().getMobSet(entityType);
                 if (mobSet != null) {
-                    int level = weaponUtilBad.getLevel();
-                    int exp = weaponUtilBad.getExp() + mobSet.getExp(); // increment exp
-                    do {
-                        if (exp < iSet.getIExp(level)) {
-                            weaponUtilBad.setExp(exp);
-                        } else if (level < iSet.getIMaxLevel()) {
-                            exp = (int) (WeaponUtilBad.MIN_EXP + (exp - iSet.getIExp(level)));
-                            level++;
-                            weaponUtilBad.setExp(exp);
-                            weaponUtilBad.setLevel(level);
-                        } else {
-                            weaponUtilBad.setExp((int) iSet.getIExp(level));
-                            break;
-                        }
-                    } while(exp >= iSet.getIExp(level));
+                    upgradeWeapon(weaponUtilBad, iSet, mobSet.getExp(), false);
                 }
             }
             weaponUtilBad.save();
         }
+    }
+
+    private void upgradeWeapon(WeaponUtilBad weaponUtilBad, ISet iSet, int addExp, boolean upgrade) {
+        int level = weaponUtilBad.getLevel();
+        int exp = weaponUtilBad.getExp() + addExp; // increment exp
+        do {
+            if (exp < iSet.getIExp(level)) {
+                weaponUtilBad.setExp(exp);
+            } else if (level < (upgrade ? iSet.getIMaxLevelUpgrade() : iSet.getIMaxLevel())) {
+                exp = (int) (WeaponUtilBad.MIN_EXP + (exp - iSet.getIExp(level)));
+                level++;
+                weaponUtilBad.setExp(exp);
+                weaponUtilBad.setLevel(level);
+            } else {
+                weaponUtilBad.setExp((int) iSet.getIExp(level));
+                break;
+            }
+        } while(exp >= iSet.getIExp(level));
     }
 
     private int randInt(int min, int max) {

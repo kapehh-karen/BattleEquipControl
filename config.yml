@@ -4,7 +4,18 @@ MAIN:
     max_level_upgrade: 15
     eval_exp: Math.exp(lvl)
 UPGRADE:
-
+    EMERALD:
+        exp: 1
+    DIAMOND:
+        exp: 1
+    IRON_INGOT:
+        exp: 1
+    GOLD_INGOT:
+        exp: 1
+    INK_SACK:
+        exp: 1
+    REDSTONE:
+        exp: 1
 MOBS:
     PLAYER:
         exp: 5

@@ -80,6 +80,7 @@ public class ArmorSet implements ISet {
         return "ArmorSet{" +
                 "material=" + material +
                 ", maxLevel=" + maxLevel +
+                ", maxLevelUpgrade=" + maxLevelUpgrade +
                 ", strongList=" + strongList +
                 ", expList=" + expList +
                 '}';

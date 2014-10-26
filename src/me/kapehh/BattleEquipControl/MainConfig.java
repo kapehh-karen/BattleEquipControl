@@ -1,11 +1,9 @@
 package me.kapehh.BattleEquipControl;
 
-import me.kapehh.BattleEquipControl.core.ArmorConfig;
-import me.kapehh.BattleEquipControl.core.MobConfig;
-import me.kapehh.BattleEquipControl.core.NodamageConfig;
-import me.kapehh.BattleEquipControl.core.WeaponConfig;
+import me.kapehh.BattleEquipControl.core.*;
 import me.kapehh.BattleEquipControl.sets.ArmorSet;
 import me.kapehh.BattleEquipControl.sets.MobSet;
+import me.kapehh.BattleEquipControl.sets.UpgradeSet;
 import me.kapehh.BattleEquipControl.sets.WeaponSet;
 import me.kapehh.main.pluginmanager.config.EventPluginConfig;
 import me.kapehh.main.pluginmanager.config.EventType;
@@ -101,6 +99,7 @@ public class MainConfig {
         WeaponConfig weaponConfig = main.getWeaponConfig();
         MobConfig mobConfig = main.getMobConfig();
         NodamageConfig nodamageConfig = main.getNodamageConfig();
+        UpgradeConfig upgradeConfig = main.getUpgradeConfig();
 
         main.getLogger().info("Start read config!");
 
@@ -115,9 +114,17 @@ public class MainConfig {
             return;
         }
 
+        Set<String> setUpgrades = ((ConfigurationSection)cfg.get("UPGRADE")).getKeys(false);
         Set<String> setArmors = ((ConfigurationSection)cfg.get("ARMOR")).getKeys(false);
         Set<String> setWeapons = ((ConfigurationSection)cfg.get("WEAPONS")).getKeys(false);
         Set<String> setMobs = ((ConfigurationSection)cfg.get("MOBS")).getKeys(false);
+
+        for (String key : setUpgrades) {
+            int exp = cfg.getInt("UPGRADE." + key + ".exp", 0);
+            upgradeConfig.addUpgradeSet(
+                new UpgradeSet(Material.valueOf(key), exp)
+            );
+        }
 
         for (String key : setArmors) {
             String evalProtect = cfg.getString("ARMOR." + key + ".eval_level_strong", "0");
@@ -139,7 +146,7 @@ public class MainConfig {
             String evalDamage = cfg.getString("WEAPONS." + key + ".eval_level_damage", "0");
             try {
                 WeaponSet weaponSet = new WeaponSet(
-                        Material.valueOf(key),
+                    Material.valueOf(key),
                     maxLevel,
                     maxLevelUpgrade,
                     evalString(evalDamage, maxLevelUpgrade),

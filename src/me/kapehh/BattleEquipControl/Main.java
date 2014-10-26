@@ -1,11 +1,14 @@
 package me.kapehh.BattleEquipControl;
 
 import me.kapehh.BattleEquipControl.bukkit.EnchantmentManager;
-import me.kapehh.BattleEquipControl.core.ArmorConfig;
-import me.kapehh.BattleEquipControl.core.MobConfig;
-import me.kapehh.BattleEquipControl.core.NodamageConfig;
-import me.kapehh.BattleEquipControl.core.WeaponConfig;
+import me.kapehh.BattleEquipControl.core.*;
 import me.kapehh.main.pluginmanager.config.PluginConfig;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.inventory.FurnaceRecipe;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.script.ScriptEngine;
@@ -21,6 +24,7 @@ public class Main extends JavaPlugin {
     WeaponConfig weaponConfig = new WeaponConfig();
     MobConfig mobConfig = new MobConfig();
     NodamageConfig nodamageConfig = new NodamageConfig();
+    UpgradeConfig upgradeConfig = new UpgradeConfig();
 
     @Override
     public void onEnable() {
@@ -39,6 +43,12 @@ public class Main extends JavaPlugin {
         pluginConfig.loadData();
 
         //EnchantmentManager.init();
+        /*ItemStack resultFurnace = new ItemStack(Material.DIAMOND_SWORD);
+        ItemMeta itemMeta = resultFurnace.getItemMeta();
+        itemMeta.setDisplayName("Upgrade!");
+        resultFurnace.setItemMeta(itemMeta);
+        FurnaceRecipe furnaceRecipe = new FurnaceRecipe(resultFurnace, Material.DIAMOND_SWORD);
+        Bukkit.addRecipe(furnaceRecipe);*/
     }
 
     @Override
@@ -57,6 +67,9 @@ public class Main extends JavaPlugin {
     }
     public NodamageConfig getNodamageConfig() {
         return nodamageConfig;
+    }
+    public UpgradeConfig getUpgradeConfig() {
+        return upgradeConfig;
     }
     public ScriptEngine getScriptEngine() {
         return scriptEngine;

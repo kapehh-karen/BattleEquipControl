@@ -19,4 +19,11 @@ public class NodamageConfig {
     public boolean containsMaterial(Material item) {
         return materials.contains(item);
     }
+
+    @Override
+    public String toString() {
+        return "NodamageConfig{" +
+                "materials=" + materials +
+                '}';
+    }
 }

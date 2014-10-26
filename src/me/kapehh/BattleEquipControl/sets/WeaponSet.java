@@ -82,6 +82,7 @@ public class WeaponSet implements ISet {
         return "WeaponSet{" +
                 "material=" + material +
                 ", maxLevel=" + maxLevel +
+                ", maxLevelUpgrade=" + maxLevelUpgrade +
                 ", damageList=" + damageList +
                 ", expList=" + expList +
                 '}';
