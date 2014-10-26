@@ -9,8 +9,8 @@ BattleEquipControl
 MAIN:
     max_level: 10 # максимальный уровень при килах
     max_level_upgrade: 15 # максимальный уровень при заточке
-    eval_exp: Math.exp(lvl) # вычисляемый опыт который надо заработать
-    chance_fail_upgrade: 10 # шанс сброса опыта при заточке
+    eval_exp: Math.exp(lvl) # вычисляемый опыт для каждого lvl-а
+    chance_fail_upgrade: 10 # шанс сброса опыта при заточке (от 0 до 100 в процентах)
 UPGRADE: # опыт даваемый за заточку
     EMERALD:
         exp: 1
@@ -129,5 +129,5 @@ WEAPONS:
         eval_level_damage: 8 + lvl * 2
     DIAMOND_AXE:
         eval_level_damage: 10 + lvl * 2
-NODAMAGE: [FISHING_ROD, STICK]
+NODAMAGE: [FISHING_ROD, STICK] # список предметов которые не наносят дамага
 </pre>
