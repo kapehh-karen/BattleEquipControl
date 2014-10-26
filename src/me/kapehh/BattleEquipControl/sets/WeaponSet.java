@@ -15,6 +15,7 @@ public class WeaponSet implements ISet {
     Integer maxLevelUpgrade = 1;
     List<Double> damageList = null;
     List<Double> expList = null;
+    int singleMaxLevel;
 
     public WeaponSet(Material material, Integer maxLevel, Integer maxLevelUpgrade, List<Double> damageList, List<Double> expList) {
         this.damageList = damageList;
@@ -22,6 +23,7 @@ public class WeaponSet implements ISet {
         this.maxLevel = maxLevel;
         this.material = material;
         this.maxLevelUpgrade = maxLevelUpgrade;
+        this.singleMaxLevel = Math.max(maxLevel, maxLevelUpgrade);
     }
 
     public Material getMaterial() {
@@ -30,14 +32,14 @@ public class WeaponSet implements ISet {
 
     public double getDamage(int level) {
         if (level < 1) level = 1;
-        if (level > maxLevel) level = maxLevel;
+        if (level > singleMaxLevel) level = maxLevel;
         if (level > damageList.size()) return 0;
         return damageList.get(level - 1);
     }
 
     public double getExp(int level) {
         if (level < 1) level = 1;
-        if (level > maxLevel) level = maxLevel;
+        if (level > singleMaxLevel) level = maxLevel;
         if (level > expList.size()) return 0;
         return expList.get(level - 1);
     }

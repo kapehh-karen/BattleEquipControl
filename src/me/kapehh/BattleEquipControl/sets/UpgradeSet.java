@@ -9,10 +9,12 @@ import org.bukkit.entity.EntityType;
 public class UpgradeSet {
     Material material;
     int exp;
+    double chanceFailUpgrade;
 
-    public UpgradeSet(Material material, int exp) {
+    public UpgradeSet(Material material, int exp, double chanceFailUpgrade) {
         this.material = material;
         this.exp = exp;
+        this.chanceFailUpgrade = chanceFailUpgrade;
     }
 
     public Material getMaterial() {
@@ -21,6 +23,10 @@ public class UpgradeSet {
 
     public int getExp() {
         return exp;
+    }
+
+    public double getChanceFailUpgrade() {
+        return chanceFailUpgrade;
     }
 
     @Override

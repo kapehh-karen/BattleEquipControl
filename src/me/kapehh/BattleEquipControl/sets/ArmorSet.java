@@ -13,6 +13,7 @@ public class ArmorSet implements ISet {
     Integer maxLevelUpgrade = 1;
     List<Double> strongList = null;
     List<Double> expList = null;
+    int singleMaxLevel;
 
     public ArmorSet(Material material, Integer maxLevel, Integer maxLevelUpgrade, List<Double> strongList, List<Double> expList) {
         this.strongList = strongList;
@@ -20,6 +21,7 @@ public class ArmorSet implements ISet {
         this.maxLevel = maxLevel;
         this.material = material;
         this.maxLevelUpgrade = maxLevelUpgrade;
+        this.singleMaxLevel = Math.max(maxLevel, maxLevelUpgrade);
     }
 
     public Material getMaterial() {
@@ -28,14 +30,14 @@ public class ArmorSet implements ISet {
 
     public double getStrong(int level) {
         if (level < 1) level = 1;
-        if (level > maxLevel) level = maxLevel;
+        if (level > singleMaxLevel) level = maxLevel;
         if (level > strongList.size()) return 0;
         return strongList.get(level - 1);
     }
 
     public double getExp(int level) {
         if (level < 1) level = 1;
-        if (level > maxLevel) level = maxLevel;
+        if (level > singleMaxLevel) level = maxLevel;
         if (level > expList.size()) return 0;
         return expList.get(level - 1);
     }

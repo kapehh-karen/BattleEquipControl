@@ -259,6 +259,7 @@ public class MainListener implements Listener {
         System.out.println(str);
     }*/
 
+    @Deprecated
     @EventHandler(priority = EventPriority.LOWEST)
     public void onEvent(InventoryClickEvent event) {
         AnvilInventory inventory;
@@ -296,19 +297,21 @@ public class MainListener implements Listener {
                 }
 
                 if (isFull) {
-                    player.sendMessage("KOKOKO");
+                    player.sendMessage(ChatColor.RED + "Ваш инвентарь заполнен!");
                     return;
                 }
 
                 ISet iSet = (weaponSet != null) ? weaponSet : armorSet;
                 WeaponUtilBad weaponUtilBad = new WeaponUtilBad(currentWeapon, iSet, player);
 
+                // TODO: Add chanceFailUpgrade
                 upgradeWeapon(weaponUtilBad, iSet, upgradeSet.getExp() * currentUpgrader.getAmount(), true);
                 contents[i] = currentWeapon;
                 inventory.clear();
 
                 weaponUtilBad.save();
                 player.getInventory().setContents(contents);
+                player.updateInventory();
             }
         }
     }
@@ -403,8 +406,11 @@ public class MainListener implements Listener {
         } while(exp >= iSet.getIExp(level));
     }
 
+    private static Random rand = new Random();
     private int randInt(int min, int max) {
-        Random rand = new Random();
         return rand.nextInt((max - min) + 1) + min;
+    }
+    private double randDouble(double min, double max) {
+        return min + rand.nextDouble() * (max - min);
     }
 }
