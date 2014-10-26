@@ -5,6 +5,7 @@ package me.kapehh.BattleEquipControl.sets;
  */
 public interface ISet {
     public int getIMaxLevel();
+    public int getIMaxLevelUpgrade();
     public double getIExp(int level);
     public double getIBonus(int level);
     public String getIBonusName();

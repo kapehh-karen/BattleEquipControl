@@ -17,7 +17,6 @@ import java.util.Random;
  */
 public class Main extends JavaPlugin {
     ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("JavaScript");
-
     ArmorConfig armorConfig = new ArmorConfig();
     WeaponConfig weaponConfig = new WeaponConfig();
     MobConfig mobConfig = new MobConfig();
@@ -32,7 +31,7 @@ public class Main extends JavaPlugin {
         }
 
         getServer().getPluginManager().registerEvents(new MainListener(this), this);
-        getCommand("battleequip").setExecutor(new MainCommand(this));
+        //getCommand("battleequip").setExecutor(new MainCommand(this));
 
         PluginConfig pluginConfig = new PluginConfig(this);
         pluginConfig.addEventClasses(new MainConfig(this, pluginConfig));
@@ -59,7 +58,6 @@ public class Main extends JavaPlugin {
     public NodamageConfig getNodamageConfig() {
         return nodamageConfig;
     }
-
     public ScriptEngine getScriptEngine() {
         return scriptEngine;
     }

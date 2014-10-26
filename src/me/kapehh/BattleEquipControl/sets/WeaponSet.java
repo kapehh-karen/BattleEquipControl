@@ -12,14 +12,16 @@ import java.util.List;
 public class WeaponSet implements ISet {
     Material material = Material.AIR;
     Integer maxLevel = 1;
+    Integer maxLevelUpgrade = 1;
     List<Double> damageList = null;
     List<Double> expList = null;
 
-    public WeaponSet(Material material, Integer maxLevel, List<Double> damageList, List<Double> expList) {
+    public WeaponSet(Material material, Integer maxLevel, Integer maxLevelUpgrade, List<Double> damageList, List<Double> expList) {
         this.damageList = damageList;
         this.expList = expList;
         this.maxLevel = maxLevel;
         this.material = material;
+        this.maxLevelUpgrade = maxLevelUpgrade;
     }
 
     public Material getMaterial() {
@@ -44,6 +46,12 @@ public class WeaponSet implements ISet {
         return maxLevel;
     }
 
+    public Integer getMaxLevelUpgrade() {
+        return maxLevelUpgrade;
+    }
+
+    // Реализация интерфейса ISet
+
     @Override
     public double getIBonus(int level) {
         return getDamage(level);
@@ -56,7 +64,12 @@ public class WeaponSet implements ISet {
 
     @Override
     public int getIMaxLevel() {
-        return maxLevel;
+        return getMaxLevel();
+    }
+
+    @Override
+    public int getIMaxLevelUpgrade() {
+        return getMaxLevelUpgrade();
     }
 
     @Override

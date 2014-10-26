@@ -2,8 +2,8 @@ name: BattleEquipControl
 main: me.kapehh.BattleEquipControl.Main
 author: kapehh
 version: 1.0.0
-commands:
-    battleequip:
-        usage: /<command>
-        description: BattleEquipControl
-        aliases: bec
+#commands:
+#    battleequip:
+#        usage: /<command>
+#        description: BattleEquipControl
+#        aliases: bec
