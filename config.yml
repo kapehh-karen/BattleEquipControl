@@ -3,6 +3,8 @@ MAIN:
     max_level: 10
     max_level_upgrade: 15
     eval_exp: Math.exp(lvl)
+UPGRADE:
+
 MOBS:
     PLAYER:
         exp: 5

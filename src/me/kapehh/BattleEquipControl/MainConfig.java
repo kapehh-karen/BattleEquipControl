@@ -11,6 +11,7 @@ import me.kapehh.main.pluginmanager.config.EventPluginConfig;
 import me.kapehh.main.pluginmanager.config.EventType;
 import me.kapehh.main.pluginmanager.config.PluginConfig;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 
@@ -18,6 +19,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Karen on 25.08.2014.
@@ -88,7 +90,6 @@ public class MainConfig {
                 doubles.add((Double) ret);
             else if (ret instanceof Integer)
                 doubles.add((double) (Integer) ret);
-            //doubles.add((Double) scriptEngine.eval(eval));
         }
         return doubles;
     }
@@ -100,68 +101,6 @@ public class MainConfig {
         WeaponConfig weaponConfig = main.getWeaponConfig();
         MobConfig mobConfig = main.getMobConfig();
         NodamageConfig nodamageConfig = main.getNodamageConfig();
-
-        // TODO: Сделать загрузку по keySet из конфига
-
-        Material[] allArmors = new Material[] {
-            Material.LEATHER_HELMET,
-            Material.IRON_HELMET,
-            Material.GOLD_HELMET,
-            Material.DIAMOND_HELMET,
-            Material.CHAINMAIL_HELMET,
-            Material.LEATHER_CHESTPLATE,
-            Material.IRON_CHESTPLATE,
-            Material.GOLD_CHESTPLATE,
-            Material.DIAMOND_CHESTPLATE,
-            Material.CHAINMAIL_CHESTPLATE,
-            Material.LEATHER_LEGGINGS,
-            Material.IRON_LEGGINGS,
-            Material.GOLD_LEGGINGS,
-            Material.DIAMOND_LEGGINGS,
-            Material.CHAINMAIL_LEGGINGS,
-            Material.LEATHER_BOOTS,
-            Material.IRON_BOOTS,
-            Material.GOLD_BOOTS,
-            Material.DIAMOND_BOOTS,
-            Material.CHAINMAIL_BOOTS
-        };
-
-        Material[] allWeapons = new Material[] {
-            Material.BOW,
-            Material.WOOD_SWORD,
-            Material.STONE_SWORD,
-            Material.IRON_SWORD,
-            Material.GOLD_SWORD,
-            Material.DIAMOND_SWORD,
-            Material.WOOD_SPADE,
-            Material.STONE_SPADE,
-            Material.IRON_SPADE,
-            Material.GOLD_SPADE,
-            Material.DIAMOND_SPADE,
-            Material.WOOD_AXE,
-            Material.STONE_AXE,
-            Material.IRON_AXE,
-            Material.GOLD_AXE,
-            Material.DIAMOND_AXE
-        };
-
-        EntityType[] entityTypes = new EntityType[] {
-            EntityType.PLAYER,
-            EntityType.WOLF,
-            EntityType.MAGMA_CUBE,
-            EntityType.BLAZE,
-            EntityType.WITCH,
-            EntityType.CAVE_SPIDER,
-            EntityType.ENDERMAN,
-            EntityType.PIG_ZOMBIE,
-            EntityType.GHAST,
-            EntityType.SLIME,
-            EntityType.ZOMBIE,
-            EntityType.SPIDER,
-            EntityType.SKELETON,
-            EntityType.CREEPER,
-            EntityType.ENDER_DRAGON
-        };
 
         main.getLogger().info("Start read config!");
 
@@ -176,11 +115,15 @@ public class MainConfig {
             return;
         }
 
-        for (Material material : allArmors) {
-            String evalProtect = cfg.getString("ARMOR." + material.toString() + ".eval_level_strong", "0");
+        Set<String> setArmors = ((ConfigurationSection)cfg.get("ARMOR")).getKeys(false);
+        Set<String> setWeapons = ((ConfigurationSection)cfg.get("WEAPONS")).getKeys(false);
+        Set<String> setMobs = ((ConfigurationSection)cfg.get("MOBS")).getKeys(false);
+
+        for (String key : setArmors) {
+            String evalProtect = cfg.getString("ARMOR." + key + ".eval_level_strong", "0");
             try {
                 ArmorSet armorSet = new ArmorSet(
-                    material,
+                    Material.valueOf(key),
                     maxLevel,
                     maxLevelUpgrade,
                     evalString(evalProtect, maxLevelUpgrade),
@@ -192,11 +135,11 @@ public class MainConfig {
             }
         }
 
-        for (Material material : allWeapons) {
-            String evalDamage = cfg.getString("WEAPONS." + material.toString() + ".eval_level_damage", "0");
+        for (String key : setWeapons) {
+            String evalDamage = cfg.getString("WEAPONS." + key + ".eval_level_damage", "0");
             try {
                 WeaponSet weaponSet = new WeaponSet(
-                    material,
+                        Material.valueOf(key),
                     maxLevel,
                     maxLevelUpgrade,
                     evalString(evalDamage, maxLevelUpgrade),
@@ -208,9 +151,9 @@ public class MainConfig {
             }
         }
 
-        for (EntityType entityType : entityTypes) {
-            int exp = cfg.getInt("MOBS." + entityType.toString() + ".exp", 0);
-            mobConfig.addMobSet(new MobSet(entityType, exp));
+        for (String key : setMobs) {
+            int exp = cfg.getInt("MOBS." + key + ".exp", 0);
+            mobConfig.addMobSet(new MobSet(EntityType.valueOf(key), exp));
         }
 
         List<String> nodamage = cfg.getStringList("NODAMAGE");

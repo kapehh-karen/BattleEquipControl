@@ -28,10 +28,6 @@ public class WeaponUtilBad {
     private int version;
     private String createdBy;
 
-    /*public WeaponUtilBad(ItemStack itemStack, ISet iSet) {
-        this(itemStack, iSet, null);
-    }*/
-
     public WeaponUtilBad(ItemStack itemStack, ISet iSet, Player player) {
         this.iSet = iSet;
         this.player = player;
@@ -47,7 +43,7 @@ public class WeaponUtilBad {
         StringBuilder stringBuilder = new StringBuilder().append(PREFFIX).append('[');
         int p = (int) (exp * 100 / iSet.getIExp(level));
         for (int i = 1; i <= 10; i++, p -= 10) {
-            if (p > 10) {
+            if (p >= 10) {
                 stringBuilder.append(ChatColor.RED).append(ChatColor.BOLD).append('|');
             } else {
                 stringBuilder.append(ChatColor.DARK_GRAY).append(ChatColor.BOLD).append('|');
