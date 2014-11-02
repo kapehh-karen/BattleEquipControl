@@ -19,7 +19,6 @@ import java.util.Random;
  * Created by Karen on 25.08.2014.
  */
 public class Main extends JavaPlugin {
-    ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("JavaScript");
     ArmorConfig armorConfig = new ArmorConfig();
     WeaponConfig weaponConfig = new WeaponConfig();
     MobConfig mobConfig = new MobConfig();
@@ -42,7 +41,9 @@ public class Main extends JavaPlugin {
         pluginConfig.setup();
         pluginConfig.loadData();
 
-        //EnchantmentManager.init();
+        // init enchants
+        EnchantmentManager.init();
+
         /*ItemStack resultFurnace = new ItemStack(Material.DIAMOND_SWORD);
         ItemMeta itemMeta = resultFurnace.getItemMeta();
         itemMeta.setDisplayName("Upgrade!");
@@ -70,8 +71,5 @@ public class Main extends JavaPlugin {
     }
     public UpgradeConfig getUpgradeConfig() {
         return upgradeConfig;
-    }
-    public ScriptEngine getScriptEngine() {
-        return scriptEngine;
     }
 }

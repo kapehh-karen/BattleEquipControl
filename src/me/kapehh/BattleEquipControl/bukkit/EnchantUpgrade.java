@@ -6,17 +6,17 @@ import org.bukkit.enchantments.EnchantmentWrapper;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * Created by Karen on 01.09.2014.
+ * Created by Karen on 02.11.2014.
  */
-public class EnchantLevel extends EnchantmentWrapper {
+public class EnchantUpgrade extends EnchantmentWrapper {
 
-    public EnchantLevel(int id) {
+    public EnchantUpgrade(int id) {
         super(id);
     }
 
     @Override
     public String getName() {
-        return "EnchantLevel";
+        return "EnchantUpgrade";
     }
 
     @Override
@@ -31,12 +31,12 @@ public class EnchantLevel extends EnchantmentWrapper {
 
     @Override
     public EnchantmentTarget getItemTarget() {
-        return null;
+        return EnchantmentTarget.ALL;
     }
 
     @Override
     public int getMaxLevel() {
-        return Integer.MAX_VALUE;
+        return 10;
     }
 
     @Override

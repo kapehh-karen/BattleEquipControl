@@ -9,9 +9,7 @@ import java.lang.reflect.Field;
  * Created by Karen on 01.09.2014.
  */
 public class EnchantmentManager {
-    public static final EnchantLevel ENCHANT_LEVEL = new EnchantLevel(200);
-    public static final EnchantExp ENCHANT_EXP = new EnchantExp(201);
-    public static final EnchantVersion ENCHANT_VERSION = new EnchantVersion(202);
+    public static final EnchantUpgrade ENCHANT_UPGRADE = new EnchantUpgrade(210);
 
     private static boolean isInit = false;
 
@@ -24,9 +22,7 @@ public class EnchantmentManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        EnchantmentWrapper.registerEnchantment(ENCHANT_LEVEL);
-        EnchantmentWrapper.registerEnchantment(ENCHANT_EXP);
-        EnchantmentWrapper.registerEnchantment(ENCHANT_VERSION);
+        EnchantmentWrapper.registerEnchantment(ENCHANT_UPGRADE);
         isInit = true;
     }
 

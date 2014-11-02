@@ -14,6 +14,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 
 import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +73,7 @@ public class MainConfig {
 
     Main main;
     PluginConfig pluginConfig;
+    ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("JavaScript");
 
     public MainConfig(Main main, PluginConfig pluginConfig) {
         this.main = main;
@@ -80,7 +82,6 @@ public class MainConfig {
 
     private List<Double> evalString(String eval, int max) throws ScriptException {
         List<Double> doubles = new ArrayList<Double>();
-        ScriptEngine scriptEngine = main.getScriptEngine();
         for (int i = 1; i <= max; i++) {
             scriptEngine.put("lvl", i);
             Object ret = scriptEngine.eval(eval);

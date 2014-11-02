@@ -1,11 +1,12 @@
 package me.kapehh.BattleEquipControl;
 
+import me.kapehh.BattleEquipControl.bukkit.EnchantmentManager;
 import me.kapehh.BattleEquipControl.core.NodamageConfig;
-import me.kapehh.BattleEquipControl.helpers.WeaponUtil;
 import me.kapehh.BattleEquipControl.helpers.WeaponUtilBad;
 import me.kapehh.BattleEquipControl.sets.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -20,14 +21,12 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
-import java.awt.*;
 import java.awt.event.ItemEvent;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by Karen on 25.08.2014.
@@ -270,10 +269,25 @@ public class MainListener implements Listener {
             return;
         }
 
-        // Если событие - положить. И слот для крафта.
         if (event.getSlotType().equals(InventoryType.SlotType.RESULT) &&
-            /*(event.getAction().equals(InventoryAction.PLACE_ALL) || event.getAction().equals(InventoryAction.PLACE_ONE)) &&*/
-            (inventory.getItem(0) != null && inventory.getItem(1) != null)) {
+            inventory.getItem(0) != null && inventory.getItem(1) != null) {
+
+            System.out.println("EnchantmentStorageMeta -> 0");
+            ItemStack currentUpgrader = inventory.getItem(1);
+            EnchantmentStorageMeta meta = (EnchantmentStorageMeta)currentUpgrader.getItemMeta();
+            System.out.println("EnchantmentStorageMeta -> 1");
+            if (!meta.hasStoredEnchant(EnchantmentManager.ENCHANT_UPGRADE)) {
+                System.out.println("EnchantmentStorageMeta -> 2");
+                meta.setDisplayName("Nyan ^^");
+                meta.addStoredEnchant(EnchantmentManager.ENCHANT_UPGRADE, 1, true);
+                currentUpgrader.setItemMeta(meta);
+                System.out.println("EnchantmentStorageMeta -> 3");
+            }
+        }
+
+        // Если событие - положить. И слот для крафта.
+        /*if (event.getSlotType().equals(InventoryType.SlotType.RESULT) &&
+              inventory.getItem(0) != null && inventory.getItem(1) != null) {
 
             ItemStack currentUpgrader = inventory.getItem(0) == null ? event.getCursor() : inventory.getItem(0);
             ItemStack currentWeapon = inventory.getItem(1) == null ? event.getCursor() : inventory.getItem(1);
@@ -319,7 +333,7 @@ public class MainListener implements Listener {
                 player.getInventory().setContents(contents);
                 player.updateInventory();
             }
-        }
+        }*/
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
