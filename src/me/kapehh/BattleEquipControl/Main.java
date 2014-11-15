@@ -8,7 +8,9 @@ import org.bukkit.Material;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.script.ScriptEngine;
@@ -34,7 +36,7 @@ public class Main extends JavaPlugin {
         }
 
         getServer().getPluginManager().registerEvents(new MainListener(this), this);
-        //getCommand("battleequip").setExecutor(new MainCommand(this));
+        getCommand("battleequip").setExecutor(new MainCommand());
 
         PluginConfig pluginConfig = new PluginConfig(this);
         pluginConfig.addEventClasses(new MainConfig(this, pluginConfig));
@@ -42,8 +44,19 @@ public class Main extends JavaPlugin {
         pluginConfig.loadData();
 
         // init enchants
-        EnchantmentManager.init();
-
+        //EnchantmentManager.init();
+        /*ShapedRecipe recipe = new ShapedRecipe(new ItemStack(Material.WOOD_SWORD, 1));
+        recipe.shape("   ", " I ", " U ");
+        recipe.setIngredient('I', Material.DIAMOND_SWORD);
+        recipe.setIngredient('U', Material.GOLD_INGOT);
+        Bukkit.getServer().addRecipe(recipe);*/
+        ShapelessRecipe recipe = new ShapelessRecipe(new ItemStack(Material.WOOD_SWORD, 1));
+        /*recipe.shape("   ", " I ", " U ");
+        recipe.setIngredient('I', Material.DIAMOND_SWORD);
+        recipe.setIngredient('U', Material.GOLD_INGOT);*/
+        recipe.addIngredient(Material.DIAMOND_SWORD);
+        recipe.addIngredient(Material.GOLD_INGOT);
+        Bukkit.getServer().addRecipe(recipe);
         /*ItemStack resultFurnace = new ItemStack(Material.DIAMOND_SWORD);
         ItemMeta itemMeta = resultFurnace.getItemMeta();
         itemMeta.setDisplayName("Upgrade!");

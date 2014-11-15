@@ -4,10 +4,12 @@ import me.kapehh.BattleEquipControl.bukkit.EnchantmentManager;
 import me.kapehh.BattleEquipControl.core.NodamageConfig;
 import me.kapehh.BattleEquipControl.helpers.WeaponUtilBad;
 import me.kapehh.BattleEquipControl.sets.*;
+import net.minecraft.server.v1_7_R3.CraftingManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -19,6 +21,7 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.AnvilInventory;
+import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
@@ -217,12 +220,33 @@ public class MainListener implements Listener {
         Player playerAttacked = getFromEntity(event.getEntity()); // Того кого атакуют
     }*/
 
-    /*@EventHandler(priority = EventPriority.LOWEST)
-    public void onCraft(CraftItemEvent event) {
-
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPrepareItemCraft(PrepareItemCraftEvent event) {
+        /*CraftingInventory inv = event.getInventory();
+        System.out.println(Arrays.asList(inv.getMatrix()));*/
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
+    public void onCraftItem(CraftItemEvent event) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(event.getInventory()).append("\n");
+        sb.append(event.getRecipe()).append("\n");
+        sb.append(event.getAction()).append("\n");
+        sb.append(event.getClick()).append("\n");
+        sb.append(event.getCurrentItem()).append("\n");
+        sb.append(event.getCursor()).append("\n");
+        sb.append(event.getHotbarButton()).append("\n");
+        sb.append(event.getRawSlot()).append("\n");
+        sb.append(event.getResult()).append("\n");
+        sb.append(event.getWhoClicked()).append("\n");
+        sb.append(event.getSlot()).append("\n");
+        sb.append(event.getSlotType()).append("\n");
+        sb.append(event.getView()).append("\n");
+        System.out.println(sb.toString());
+        //event.setResult(Event.Result.DENY);
+    }
+
+    /*@EventHandler(priority = EventPriority.LOWEST)
     public void onEnchant(PrepareItemEnchantEvent event) {
 
     }*/
@@ -260,8 +284,36 @@ public class MainListener implements Listener {
 
     @Deprecated
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onEvent(InventoryClickEvent event) {
-        AnvilInventory inventory;
+    public void onInventoryClickEvent(InventoryClickEvent event) {
+        /*CraftingInventory inventory;
+        if (event.getInventory() instanceof CraftingInventory) {
+            inventory = (CraftingInventory) event.getInventory();
+        } else {
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(event.getInventory()).append("\n");
+        sb.append(event.getAction()).append("\n");
+        sb.append(event.getClick()).append("\n");
+        sb.append(event.getCurrentItem()).append("\n");
+        sb.append(event.getCursor()).append("\n");
+        sb.append(event.getHotbarButton()).append("\n");
+        sb.append(event.getRawSlot()).append("\n");
+        sb.append(event.getResult()).append("\n");
+        sb.append(event.getWhoClicked()).append("\n");
+        sb.append(event.getSlot()).append("\n");
+        sb.append(event.getSlotType()).append("\n");
+        sb.append(event.getView()).append("\n");
+        System.out.println(sb.toString());
+
+        List<ItemStack> list = Arrays.asList(inventory.getMatrix());
+        System.out.println(list);
+        inventory.setResult(list.get(0));
+
+        AnvilInventory inv;*/
+
+        /*AnvilInventory inventory;
         if (event.getInventory() instanceof AnvilInventory) {
             inventory = (AnvilInventory) event.getInventory();
         } else {
@@ -283,7 +335,7 @@ public class MainListener implements Listener {
                 currentUpgrader.setItemMeta(meta);
                 System.out.println("EnchantmentStorageMeta -> 3");
             }
-        }
+        }*/
 
         // Если событие - положить. И слот для крафта.
         /*if (event.getSlotType().equals(InventoryType.SlotType.RESULT) &&
