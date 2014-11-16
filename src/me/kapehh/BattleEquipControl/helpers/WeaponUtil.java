@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by Karen on 01.09.2014.
  */
-public class WeaponUtilBad {
+public class WeaponUtil {
     public static final int CURRENT_VERSION = 8;
     public static final int MIN_LEVEL = 1;
     public static final int MIN_EXP = 0;
@@ -28,7 +28,7 @@ public class WeaponUtilBad {
     private int version;
     private String createdBy;
 
-    public WeaponUtilBad(ItemStack itemStack, ISet iSet, Player player) {
+    public WeaponUtil(ItemStack itemStack, ISet iSet, Player player) {
         this.iSet = iSet;
         this.player = player;
         this.itemStack = itemStack;

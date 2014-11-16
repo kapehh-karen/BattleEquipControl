@@ -2,6 +2,10 @@ package me.kapehh.BattleEquipControl;
 
 import me.kapehh.BattleEquipControl.bukkit.EnchantmentManager;
 import me.kapehh.BattleEquipControl.core.*;
+import me.kapehh.BattleEquipControl.sets.ArmorSet;
+import me.kapehh.BattleEquipControl.sets.ISet;
+import me.kapehh.BattleEquipControl.sets.WeaponSet;
+import me.kapehh.BattleEquipControl.upgrade.UpgradeManager;
 import me.kapehh.main.pluginmanager.config.PluginConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -21,6 +25,7 @@ import java.util.Random;
  * Created by Karen on 25.08.2014.
  */
 public class Main extends JavaPlugin {
+    UpgradeManager upgradeManager = new UpgradeManager();
     ArmorConfig armorConfig = new ArmorConfig();
     WeaponConfig weaponConfig = new WeaponConfig();
     MobConfig mobConfig = new MobConfig();
@@ -43,20 +48,20 @@ public class Main extends JavaPlugin {
         pluginConfig.setup();
         pluginConfig.loadData();
 
-        // init enchants
+        // init upgrades
+        upgradeManager.init(this);
+
         //EnchantmentManager.init();
         /*ShapedRecipe recipe = new ShapedRecipe(new ItemStack(Material.WOOD_SWORD, 1));
         recipe.shape("   ", " I ", " U ");
         recipe.setIngredient('I', Material.DIAMOND_SWORD);
         recipe.setIngredient('U', Material.GOLD_INGOT);
         Bukkit.getServer().addRecipe(recipe);*/
-        ShapelessRecipe recipe = new ShapelessRecipe(new ItemStack(Material.WOOD_SWORD, 1));
-        /*recipe.shape("   ", " I ", " U ");
+        /*ShapedRecipe recipe = new ShapedRecipe(new ItemStack(Material.WOOD_SWORD, 1));
+        recipe.shape("UUU", "UIU", "UUU");
         recipe.setIngredient('I', Material.DIAMOND_SWORD);
-        recipe.setIngredient('U', Material.GOLD_INGOT);*/
-        recipe.addIngredient(Material.DIAMOND_SWORD);
-        recipe.addIngredient(Material.GOLD_INGOT);
-        Bukkit.getServer().addRecipe(recipe);
+        recipe.setIngredient('U', Material.GOLD_INGOT);
+        Bukkit.getServer().addRecipe(recipe);*/
         /*ItemStack resultFurnace = new ItemStack(Material.DIAMOND_SWORD);
         ItemMeta itemMeta = resultFurnace.getItemMeta();
         itemMeta.setDisplayName("Upgrade!");
@@ -68,6 +73,15 @@ public class Main extends JavaPlugin {
     @Override
     public void onDisable() {
 
+    }
+
+    public ISet getIset(ItemStack itemStack) {
+        WeaponSet weaponSet = getWeaponConfig().getWeaponSet(itemStack.getType());
+        ArmorSet armorSet = getArmorConfig().getArmorSet(itemStack.getType());
+        if (weaponSet != null || armorSet != null)
+            return (weaponSet == null) ? armorSet : weaponSet;
+        else
+            return null;
     }
 
     public ArmorConfig getArmorConfig() {
@@ -84,5 +98,8 @@ public class Main extends JavaPlugin {
     }
     public UpgradeConfig getUpgradeConfig() {
         return upgradeConfig;
+    }
+    public UpgradeManager getUpgradeManager() {
+        return upgradeManager;
     }
 }

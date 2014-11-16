@@ -11,7 +11,7 @@ import java.util.List;
  * Created by Karen on 03.09.2014.
  */
 public class MobConfig {
-    List<MobSet> mobSetList = new ArrayList<MobSet>();
+    public List<MobSet> mobSetList = new ArrayList<MobSet>();
 
     public void addMobSet(MobSet mobSet) {
         mobSetList.add(mobSet);

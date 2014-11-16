@@ -10,7 +10,7 @@ import java.util.List;
  * Created by Karen on 29.09.2014.
  */
 public class NodamageConfig {
-    List<Material> materials = new ArrayList<Material>();
+    public List<Material> materials = new ArrayList<Material>();
 
     public void addMaterial(Material item) {
         materials.add(item);

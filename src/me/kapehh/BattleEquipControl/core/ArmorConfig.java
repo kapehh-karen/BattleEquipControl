@@ -10,7 +10,7 @@ import java.util.List;
  * Created by Karen on 25.08.2014.
  */
 public class ArmorConfig {
-    List<ArmorSet> armorSets = new ArrayList<ArmorSet>();
+    public List<ArmorSet> armorSets = new ArrayList<ArmorSet>();
 
     public void addArmorSet(ArmorSet armorSet) {
         armorSets.add(armorSet);

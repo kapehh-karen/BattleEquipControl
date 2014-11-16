@@ -12,7 +12,7 @@ import java.util.List;
  * Created by Karen on 26.10.2014.
  */
 public class UpgradeConfig {
-    List<UpgradeSet> upgradeSetList = new ArrayList<UpgradeSet>();
+    public List<UpgradeSet> upgradeSetList = new ArrayList<UpgradeSet>();
 
     public void addUpgradeSet(UpgradeSet upgradeSet) {
         upgradeSetList.add(upgradeSet);

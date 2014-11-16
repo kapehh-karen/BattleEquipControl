@@ -11,7 +11,7 @@ import java.util.List;
  * Created by Karen on 26.08.2014.
  */
 public class WeaponConfig {
-    List<WeaponSet> weaponSets = new ArrayList<WeaponSet>();
+    public List<WeaponSet> weaponSets = new ArrayList<WeaponSet>();
 
     public void addWeaponSet(WeaponSet weaponSet) {
         weaponSets.add(weaponSet);
