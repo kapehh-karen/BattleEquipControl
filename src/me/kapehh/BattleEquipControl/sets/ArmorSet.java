@@ -30,14 +30,14 @@ public class ArmorSet implements ISet {
 
     public double getStrong(int level) {
         if (level < 1) level = 1;
-        if (level > singleMaxLevel) level = maxLevel;
+        if (level > singleMaxLevel) level = singleMaxLevel;
         if (level > strongList.size()) return 0;
         return strongList.get(level - 1);
     }
 
     public double getExp(int level) {
         if (level < 1) level = 1;
-        if (level > singleMaxLevel) level = maxLevel;
+        if (level > singleMaxLevel) level = singleMaxLevel;
         if (level > expList.size()) return 0;
         return expList.get(level - 1);
     }

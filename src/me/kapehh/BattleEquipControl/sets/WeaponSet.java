@@ -32,14 +32,14 @@ public class WeaponSet implements ISet {
 
     public double getDamage(int level) {
         if (level < 1) level = 1;
-        if (level > singleMaxLevel) level = maxLevel;
+        if (level > singleMaxLevel) level = singleMaxLevel;
         if (level > damageList.size()) return 0;
         return damageList.get(level - 1);
     }
 
     public double getExp(int level) {
         if (level < 1) level = 1;
-        if (level > singleMaxLevel) level = maxLevel;
+        if (level > singleMaxLevel) level = singleMaxLevel;
         if (level > expList.size()) return 0;
         return expList.get(level - 1);
     }

@@ -109,11 +109,13 @@ public class MainConfig {
         int maxLevel = cfg.getInt("MAIN.max_level", 1);
         int maxLevelUpgrade = cfg.getInt("MAIN.max_level_upgrade", 1);
         int singleMaxLevel = Math.max(maxLevel, maxLevelUpgrade);
-        double chanceFailUpgrade = cfg.getDouble("MAIN.chance_fail_upgrade", 0.0);
         String evalExp = cfg.getString("MAIN.eval_exp", "1");
+        String evalChanceFail = cfg.getString("MAIN.chance_fail_upgrade", "0");
         List<Double> listExp;
+        List<Double> chanceFailUpgrade;
         try {
             listExp = evalString(evalExp, singleMaxLevel);
+            chanceFailUpgrade = evalString(evalChanceFail, singleMaxLevel);
         } catch (ScriptException e) {
             e.printStackTrace();
             return;
@@ -128,7 +130,7 @@ public class MainConfig {
             int exp = cfg.getInt("UPGRADE." + key + ".exp", 0);
             byte data = (byte) cfg.getInt("UPGRADE." + key + ".data", 0);
             upgradeConfig.addUpgradeSet(
-                new UpgradeSet(new MaterialData(Material.valueOf(key), data), exp, chanceFailUpgrade)
+                new UpgradeSet(new MaterialData(Material.valueOf(key), data), exp, singleMaxLevel, chanceFailUpgrade)
             );
         }
 

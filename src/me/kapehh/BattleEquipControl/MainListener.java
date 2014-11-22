@@ -240,6 +240,11 @@ public class MainListener implements Listener {
                 if (c < min) min = c;
             }
 
+            if (min < 1) {
+                event.setResult(Event.Result.DENY);
+                return; // минимальное слишком не ок
+            }
+
             // после того как нашли минимальное
             koef_exp = min; // коэфицент умножения экспы
             min--; // так как в событии и так вычтется один итем, то надо минимальное сократить
@@ -252,20 +257,30 @@ public class MainListener implements Listener {
                 }
             }
 
-            if (koef_exp < 1) {
-                event.setResult(Event.Result.DENY);
-                return; // коэфицент не ок
+            WeaponUtil weaponUtil = new WeaponUtil(itemSource, iSet, player);
+            int fails = 0, success = 0, res_koef = 0;
+            double chanceFail = upgradeSet.getChanceFailUpgrade(weaponUtil.getLevel());
+
+            for (int i = 1; i <= koef_exp; i++) {
+                if (randDouble(0, 100) > chanceFail) {
+                    success++;
+                    res_koef++;
+                } else {
+                    fails++;
+                    res_koef = 0;
+                }
             }
 
-            WeaponUtil weaponUtil = new WeaponUtil(itemSource, iSet, player);
-            if (randDouble(0, 100) > upgradeSet.getChanceFailUpgrade()) {
-                int exp = upgradeSet.getExp() * koef_exp;
-                upgradeWeapon(weaponUtil, iSet, exp, true);
-                player.sendMessage(ChatColor.GREEN + "Заточка успешно выполнена! Получено опыта: " + exp);
-            } else {
+            int exp = 0;
+            if (fails > 0) { // если были неудачные заточки, то обнуляем
                 weaponUtil.setExp(0);
-                player.sendMessage(ChatColor.RED + "Заточка не удалась! Опыт был сброшен.");
             }
+            if (res_koef > 0) { // если коэфицент после последней последовательности удачных заточек есть, то качаем
+                exp = upgradeSet.getExp() * res_koef;
+                upgradeWeapon(weaponUtil, iSet, exp, true);
+            }
+            player.sendMessage(ChatColor.GOLD + "Заточка выполнена! Удачных: " + success + ", неудачных: " + fails + ". Получено опыта: " + exp);
+
             weaponUtil.save();
             event.setCurrentItem(itemSource);
         }
