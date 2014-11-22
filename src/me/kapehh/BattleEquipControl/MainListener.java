@@ -221,7 +221,7 @@ public class MainListener implements Listener {
             Player player = (Player) event.getWhoClicked();
             ItemStack itemSource = inventory.getItem(5);
             ItemStack itemUpgrader = inventory.getItem(1);
-            UpgradeSet upgradeSet = main.getUpgradeConfig().getUpgradeSet(itemUpgrader.getType());
+            UpgradeSet upgradeSet = main.getUpgradeConfig().getUpgradeSet(itemUpgrader.getData());
             ISet iSet = main.getIset(itemSource);
             if (iSet == null || upgradeSet == null) {
                 event.setResult(Event.Result.DENY);

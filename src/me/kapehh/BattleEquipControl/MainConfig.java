@@ -12,6 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
+import org.bukkit.material.MaterialData;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -93,6 +94,7 @@ public class MainConfig {
         return doubles;
     }
 
+    @Deprecated
     @EventPluginConfig(EventType.LOAD)
     public void onLoad() {
         FileConfiguration cfg = pluginConfig.getConfig();
@@ -124,8 +126,9 @@ public class MainConfig {
 
         for (String key : setUpgrades) {
             int exp = cfg.getInt("UPGRADE." + key + ".exp", 0);
+            byte data = (byte) cfg.getInt("UPGRADE." + key + ".data", 0);
             upgradeConfig.addUpgradeSet(
-                new UpgradeSet(Material.valueOf(key), exp, chanceFailUpgrade)
+                new UpgradeSet(new MaterialData(Material.valueOf(key), data), exp, chanceFailUpgrade)
             );
         }
 

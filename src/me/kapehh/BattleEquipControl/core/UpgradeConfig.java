@@ -4,6 +4,7 @@ import me.kapehh.BattleEquipControl.sets.MobSet;
 import me.kapehh.BattleEquipControl.sets.UpgradeSet;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+import org.bukkit.material.MaterialData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ public class UpgradeConfig {
         upgradeSetList.add(upgradeSet);
     }
 
-    public UpgradeSet getUpgradeSet(Material material) {
+    public UpgradeSet getUpgradeSet(MaterialData material) {
         for (UpgradeSet upgradeSet : upgradeSetList) {
             if (upgradeSet.getMaterial().equals(material)) {
                 return upgradeSet;

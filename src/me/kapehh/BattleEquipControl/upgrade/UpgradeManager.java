@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.material.MaterialData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +51,7 @@ public class UpgradeManager {
         }
     }
 
-    private void addMaterialAndUpgrade(Material material, Material upgrader) {
+    private void addMaterialAndUpgrade(Material material, MaterialData upgrader) {
         ShapedRecipe recipe = new ShapedRecipe(resultItem);
         recipe.shape("UUU", "UIU", "UUU");
         recipe.setIngredient('I', material);

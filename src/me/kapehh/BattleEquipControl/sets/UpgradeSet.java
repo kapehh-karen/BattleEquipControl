@@ -2,22 +2,23 @@ package me.kapehh.BattleEquipControl.sets;
 
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+import org.bukkit.material.MaterialData;
 
 /**
  * Created by Karen on 26.10.2014.
  */
 public class UpgradeSet {
-    Material material;
+    MaterialData material;
     int exp;
     double chanceFailUpgrade;
 
-    public UpgradeSet(Material material, int exp, double chanceFailUpgrade) {
+    public UpgradeSet(MaterialData material, int exp, double chanceFailUpgrade) {
         this.material = material;
         this.exp = exp;
         this.chanceFailUpgrade = chanceFailUpgrade;
     }
 
-    public Material getMaterial() {
+    public MaterialData getMaterial() {
         return material;
     }
 
