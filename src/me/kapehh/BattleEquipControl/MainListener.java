@@ -368,19 +368,31 @@ public class MainListener implements Listener {
     private void upgradeWeapon(WeaponUtil weaponUtil, ISet iSet, int addExp, boolean upgrade) {
         int level = weaponUtil.getLevel();
         int exp = weaponUtil.getExp() + addExp; // increment exp
+        int maxLevel = (upgrade ? iSet.getIMaxLevelUpgrade() : iSet.getIMaxLevel());
+        boolean fe = false;
+
         do {
+            // если уровень максимальный, то бб
+            if (level >= maxLevel) {
+                return;
+            }
+
             if (exp < iSet.getIExp(level)) {
                 weaponUtil.setExp(exp);
-            } else if (level < (upgrade ? iSet.getIMaxLevelUpgrade() : iSet.getIMaxLevel())) {
+            } else if (level < maxLevel) {
                 exp = (int) (WeaponUtil.MIN_EXP + (exp - iSet.getIExp(level)));
                 level++;
-                weaponUtil.setExp(exp);
+                fe = (exp < iSet.getIExp(level)) && (level < maxLevel);
                 weaponUtil.setLevel(level);
-            } else {
+                weaponUtil.setExp(fe ? exp : 0);
+            }/* else {
                 weaponUtil.setExp((int) iSet.getIExp(level));
                 break;
-            }
+            }*/
         } while(exp >= iSet.getIExp(level));
+        /*if (exp > 0) {
+
+        }*/
     }
 
     private static Random rand = new Random();
