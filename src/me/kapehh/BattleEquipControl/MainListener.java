@@ -12,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -152,6 +153,16 @@ public class MainListener implements Listener {
         if (event.isCancelled()) {
             return;
         }
+
+        // Если игрок не бьет игрока и не стреляет луком, то остальной дамаг мы игнорируем
+        EntityDamageEvent.DamageCause cause = event.getCause();
+        if (!cause.equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)
+            && !cause.equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
+            return;
+        }
+        /*System.out.println(event.getDamager() != null ? event.getDamager().toString() : "Damager null");
+        System.out.println(event.getEntity() != null ? event.getEntity().toString() : "Entiter null");
+        System.out.println(event.getCause().toString());*/
 
         Player playerAttacker = getFromEntity(event.getDamager()); // Кто атакует
         Player playerAttacked = getFromEntity(event.getEntity()); // Того кого атакуют
