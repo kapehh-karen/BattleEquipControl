@@ -31,8 +31,8 @@ public class UpgradeManager {
             resultItem = new ItemStack(Material.BOOK, 1, (short)123);
             ItemMeta meta = resultItem.getItemMeta();
             List<String> lore = new ArrayList<String>();
-            lore.add("Кликните чтоб применить заточку");
-            meta.setDisplayName(ChatColor.GREEN + "Заточка");
+            lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "Кликните для заточки предмета");
+            meta.setDisplayName(ChatColor.RESET + "" + ChatColor.BOLD + "Заточка");
             meta.setLore(lore);
             resultItem.setItemMeta(meta);
         }

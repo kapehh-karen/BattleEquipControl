@@ -13,15 +13,17 @@ public class WeaponSet implements ISet {
     Material material = Material.AIR;
     Integer maxLevel = 1;
     Integer maxLevelUpgrade = 1;
+    EnchantGroupSet enchantGroupSet;
     List<Double> damageList = null;
     List<Double> expList = null;
     int singleMaxLevel;
 
-    public WeaponSet(Material material, Integer maxLevel, Integer maxLevelUpgrade, List<Double> damageList, List<Double> expList) {
+    public WeaponSet(Material material, Integer maxLevel, Integer maxLevelUpgrade, EnchantGroupSet enchantGroupSet, List<Double> damageList, List<Double> expList) {
         this.damageList = damageList;
         this.expList = expList;
         this.maxLevel = maxLevel;
         this.material = material;
+        this.enchantGroupSet = enchantGroupSet;
         this.maxLevelUpgrade = maxLevelUpgrade;
         this.singleMaxLevel = Math.max(maxLevel, maxLevelUpgrade);
     }
@@ -77,6 +79,11 @@ public class WeaponSet implements ISet {
     @Override
     public double getIExp(int level) {
         return getExp(level);
+    }
+
+    @Override
+    public EnchantGroupSet getEnchantGroupSet() {
+        return enchantGroupSet;
     }
 
     @Override

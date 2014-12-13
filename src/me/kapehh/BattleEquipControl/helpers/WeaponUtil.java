@@ -32,10 +32,7 @@ public class WeaponUtil {
         this.iSet = iSet;
         this.player = player;
         this.itemStack = itemStack;
-        this.itemMeta = itemStack.getItemMeta();
-        if (!itemMeta.hasLore()) {
-            itemMeta.setLore(new ArrayList<String>());
-        }
+        updateMeta();
         load();
     }
 
@@ -124,6 +121,13 @@ public class WeaponUtil {
 
         if (version != CURRENT_VERSION) {
             update(m, p, version, true);
+        }
+    }
+
+    public void updateMeta() {
+        itemMeta = itemStack.getItemMeta();
+        if (!itemMeta.hasLore()) {
+            itemMeta.setLore(new ArrayList<String>());
         }
     }
 

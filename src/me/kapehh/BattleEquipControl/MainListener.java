@@ -6,6 +6,7 @@ import me.kapehh.BattleEquipControl.sets.*;
 import me.kapehh.BattleEquipControl.upgrade.UpgradeManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -154,20 +155,36 @@ public class MainListener implements Listener {
             return;
         }
 
-        // Если игрок не бьет игрока и не стреляет луком, то остальной дамаг мы игнорируем
-        // TODO: Сделать так, чтоб шипы наносили урон только если бить от руки
         EntityDamageEvent.DamageCause cause = event.getCause();
+        Entity attacker = event.getDamager(); // Кто атакует
+        Entity attacked = event.getEntity(); // Того кого атакуют
+
+        System.out.println(event.getDamager() != null ? attacker.toString() : "Damager null");
+        System.out.println(event.getEntity() != null ? attacked.toString() : "Entiter null");
+        System.out.println(event.getCause().toString());
+
+        Player playerAttacker = getFromEntity(attacker); // Кто атакует
+        Player playerAttacked = getFromEntity(attacked); // Того кого атакуют
+        double damage = event.getDamage();
+
+        // шипы не действуют если у игрока лук, и на моба скелетона
+        if (cause.equals(EntityDamageEvent.DamageCause.THORNS)) {
+            if ((attacked instanceof Player) && playerAttacked.getItemInHand().getType().equals(Material.BOW)) {
+                event.setDamage(0);
+                event.setCancelled(true);
+                return;
+            } else if (attacked instanceof Skeleton) {
+                event.setDamage(0);
+                event.setCancelled(true);
+                return;
+            }
+        }
+
+        // Если игрок не бьет игрока и не стреляет луком, то остальной дамаг мы оставляем как есть
         if (!cause.equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)
             && !cause.equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
             return;
         }
-        /*System.out.println(event.getDamager() != null ? event.getDamager().toString() : "Damager null");
-        System.out.println(event.getEntity() != null ? event.getEntity().toString() : "Entiter null");
-        System.out.println(event.getCause().toString());*/
-
-        Player playerAttacker = getFromEntity(event.getDamager()); // Кто атакует
-        Player playerAttacked = getFromEntity(event.getEntity()); // Того кого атакуют
-        double damage = event.getDamage();
 
         // Если есть атакующий игрок
         if (playerAttacker != null) {
@@ -264,7 +281,7 @@ public class MainListener implements Listener {
                 for (int i = 1; i <= 9; i++) {
                     if (i == 5) continue; // не нужон
                     tmp = inventory.getItem(i);
-                    c = tmp.getAmount();
+                    //c = tmp.getAmount();
                     tmp.setAmount(tmp.getAmount() - min); // вычитаем минимально возможную херню
                 }
             }
@@ -286,6 +303,19 @@ public class MainListener implements Listener {
             int exp = 0;
             if (fails > 0) { // если были неудачные заточки, то обнуляем
                 weaponUtil.setExp(0);
+                // чарим вещь, за то что обнулили её
+                EnchantGroupSet enchantGroupSet = iSet.getEnchantGroupSet();
+                if (enchantGroupSet != null) {
+                    try {
+                        enchantGroupSet.tryEnchant(itemSource, rand.nextInt(50));
+                    } catch (EnchantGroupSet.EnchantException e) {
+                        player.sendMessage(e.getMessage());
+                    }
+                    // т.к. в Meta хранится инфа о чарах, если не вызвать, чары после weaponUtil.save() пропадут
+                    weaponUtil.updateMeta();
+                }
+                //itemSource.addUnsafeEnchantment(Enchantment.FIRE_ASPECT, 10);
+                //System.out.println(itemSource.getEnchantments()); // todo
             }
             if (res_koef > 0) { // если коэфицент после последней последовательности удачных заточек есть, то качаем
                 exp = upgradeSet.getExp() * res_koef;
@@ -295,6 +325,7 @@ public class MainListener implements Listener {
 
             weaponUtil.save();
             event.setCurrentItem(itemSource);
+            //System.out.println(itemSource.getEnchantments()); // todo
         }
     }
 

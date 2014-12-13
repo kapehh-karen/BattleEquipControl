@@ -1,16 +1,14 @@
 package me.kapehh.BattleEquipControl;
 
 import me.kapehh.BattleEquipControl.core.*;
-import me.kapehh.BattleEquipControl.sets.ArmorSet;
-import me.kapehh.BattleEquipControl.sets.MobSet;
-import me.kapehh.BattleEquipControl.sets.UpgradeSet;
-import me.kapehh.BattleEquipControl.sets.WeaponSet;
+import me.kapehh.BattleEquipControl.sets.*;
 import me.kapehh.main.pluginmanager.config.EventPluginConfig;
 import me.kapehh.main.pluginmanager.config.EventType;
 import me.kapehh.main.pluginmanager.config.PluginConfig;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.material.MaterialData;
 
@@ -73,12 +71,10 @@ public class MainConfig {
     Material.DIAMOND_PICKAXE*/
 
     Main main;
-    PluginConfig pluginConfig;
     ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("JavaScript");
 
-    public MainConfig(Main main, PluginConfig pluginConfig) {
+    public MainConfig(Main main) {
         this.main = main;
-        this.pluginConfig = pluginConfig;
     }
 
     private List<Double> evalString(String eval, int max) throws ScriptException {
@@ -94,20 +90,15 @@ public class MainConfig {
         return doubles;
     }
 
-    @EventPluginConfig(EventType.LOAD)
-    public void onLoad(FileConfiguration config) {
-        
-    }
-
     @Deprecated
     @EventPluginConfig(EventType.LOAD)
-    public void onLoad() {
-        FileConfiguration cfg = pluginConfig.getConfig();
+    public void onLoad(FileConfiguration cfg) {
         ArmorConfig armorConfig = main.getArmorConfig();
         WeaponConfig weaponConfig = main.getWeaponConfig();
         MobConfig mobConfig = main.getMobConfig();
         NodamageConfig nodamageConfig = main.getNodamageConfig();
         UpgradeConfig upgradeConfig = main.getUpgradeConfig();
+        EnchantGroupConfig enchantGroupConfig = main.getEnchantGroupConfig();
 
         main.getLogger().info("Start read config!");
 
@@ -126,6 +117,22 @@ public class MainConfig {
             return;
         }
 
+        Object section = cfg.get("ENCHANT_GROUPS");
+        if (section instanceof ConfigurationSection) {
+            Set<String> setEnchantGroup = ((ConfigurationSection) cfg.get("ENCHANT_GROUPS")).getKeys(false);
+            for (String nameGroup : setEnchantGroup) {
+                EnchantGroupSet enchantGroupSet = new EnchantGroupSet(nameGroup);
+                Set<String> listEnchants = ((ConfigurationSection) cfg.get("ENCHANT_GROUPS." + nameGroup)).getKeys(false);
+                for (String nameEnchant : listEnchants) {
+                    enchantGroupSet.addEnchant(
+                            Enchantment.getByName(nameEnchant),
+                            cfg.getInt("ENCHANT_GROUPS." + nameGroup + "." + nameEnchant)
+                    );
+                }
+                enchantGroupConfig.addEnchantGroupSet(enchantGroupSet);
+            }
+        }
+
         Set<String> setUpgrades = ((ConfigurationSection)cfg.get("UPGRADE")).getKeys(false);
         Set<String> setArmors = ((ConfigurationSection)cfg.get("ARMOR")).getKeys(false);
         Set<String> setWeapons = ((ConfigurationSection)cfg.get("WEAPONS")).getKeys(false);
@@ -141,11 +148,13 @@ public class MainConfig {
 
         for (String key : setArmors) {
             String evalProtect = cfg.getString("ARMOR." + key + ".eval_level_strong", "0");
+            String enchantGroup = cfg.getString("ARMOR." + key + ".enchant_group");
             try {
                 ArmorSet armorSet = new ArmorSet(
                     Material.valueOf(key),
                     maxLevel,
                     maxLevelUpgrade,
+                    enchantGroupConfig.getEnchantGroupSet(enchantGroup),
                     evalString(evalProtect, singleMaxLevel),
                     listExp
                 );
@@ -157,11 +166,13 @@ public class MainConfig {
 
         for (String key : setWeapons) {
             String evalDamage = cfg.getString("WEAPONS." + key + ".eval_level_damage", "0");
+            String enchantGroup = cfg.getString("WEAPONS." + key + ".enchant_group");
             try {
                 WeaponSet weaponSet = new WeaponSet(
                     Material.valueOf(key),
                     maxLevel,
                     maxLevelUpgrade,
+                    enchantGroupConfig.getEnchantGroupSet(enchantGroup),
                     evalString(evalDamage, singleMaxLevel),
                     listExp
                 );

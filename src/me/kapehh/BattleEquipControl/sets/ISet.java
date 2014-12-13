@@ -9,4 +9,5 @@ public interface ISet {
     public double getIExp(int level);
     public double getIBonus(int level);
     public String getIBonusName();
+    public EnchantGroupSet getEnchantGroupSet();
 }

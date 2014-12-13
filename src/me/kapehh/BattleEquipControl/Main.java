@@ -31,6 +31,12 @@ public class Main extends JavaPlugin {
     MobConfig mobConfig = new MobConfig();
     NodamageConfig nodamageConfig = new NodamageConfig();
     UpgradeConfig upgradeConfig = new UpgradeConfig();
+    EnchantGroupConfig enchantGroupConfig = new EnchantGroupConfig();
+
+    /*public static void main(String[] args) {
+        int rnd = 35 % 2;
+        System.out.println(rnd);
+    }*/
 
     @Override
     public void onEnable() {
@@ -44,7 +50,7 @@ public class Main extends JavaPlugin {
         getCommand("battleequip").setExecutor(new MainCommand());
 
         PluginConfig pluginConfig = new PluginConfig(this);
-        pluginConfig.addEventClasses(new MainConfig(this, pluginConfig));
+        pluginConfig.addEventClasses(new MainConfig(this));
         pluginConfig.setup();
         pluginConfig.loadData();
 
@@ -101,5 +107,8 @@ public class Main extends JavaPlugin {
     }
     public UpgradeManager getUpgradeManager() {
         return upgradeManager;
+    }
+    public EnchantGroupConfig getEnchantGroupConfig() {
+        return enchantGroupConfig;
     }
 }

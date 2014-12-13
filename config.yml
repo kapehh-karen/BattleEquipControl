@@ -18,6 +18,13 @@ UPGRADE: []
 #        exp: 1
 #    REDSTONE:
 #        exp: 1
+ENCHANT_GROUPS: []
+#    ENCH_WEAPON_ODIN:
+#        DAMAGE_ALL: 7
+#    ENCH_WEAPON_DVA:
+#        DURABILITY: 3
+#        DAMAGE_ALL: 3
+#        LUCK: 3
 MOBS: []
 #    PLAYER:
 #        exp: 5
@@ -52,14 +59,19 @@ MOBS: []
 ARMOR: []
 #    LEATHER_HELMET:
 #        eval_level_strong: lvl * 0.1
+#        enchant_group: ENCH_WEAPON_ODIN
 #    IRON_HELMET:
 #        eval_level_strong: lvl * 0.2
+#        enchant_group: ENCH_WEAPON_ODIN
 #    GOLD_HELMET:
 #        eval_level_strong: lvl * 0.4
+#        enchant_group: ENCH_WEAPON_ODIN
 #    DIAMOND_HELMET:
 #        eval_level_strong: lvl * 0.5
+#        enchant_group: ENCH_WEAPON_ODIN
 #    CHAINMAIL_HELMET:
 #        eval_level_strong: lvl * 0.3
+#        enchant_group: ENCH_WEAPON_ODIN
 #    LEATHER_CHESTPLATE:
 #        eval_level_strong: lvl * 0.1
 #    IRON_CHESTPLATE:
