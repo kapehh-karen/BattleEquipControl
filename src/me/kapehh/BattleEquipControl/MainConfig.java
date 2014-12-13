@@ -94,6 +94,11 @@ public class MainConfig {
         return doubles;
     }
 
+    @EventPluginConfig(EventType.LOAD)
+    public void onLoad(FileConfiguration config) {
+        
+    }
+
     @Deprecated
     @EventPluginConfig(EventType.LOAD)
     public void onLoad() {

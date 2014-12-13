@@ -155,6 +155,7 @@ public class MainListener implements Listener {
         }
 
         // Если игрок не бьет игрока и не стреляет луком, то остальной дамаг мы игнорируем
+        // TODO: Сделать так, чтоб шипы наносили урон только если бить от руки
         EntityDamageEvent.DamageCause cause = event.getCause();
         if (!cause.equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)
             && !cause.equals(EntityDamageEvent.DamageCause.PROJECTILE)) {
