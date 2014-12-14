@@ -14,6 +14,13 @@ MAIN:
     max_level_upgrade: 15 # максимальный уровень при заточке
     eval_exp: Math.exp(lvl) # вычисляемый опыт для каждого lvl-а
     chance_fail_upgrade: 10 + lvl # шанс сброса опыта при заточке (от 0 до 100 в процентах)
+ENCHANT_GROUPS: # группы чар, выдаваемые при неудачной заточке
+    ENCH_WEAPON_ODIN: # название группы
+        DAMAGE_ALL: 7 # название чара и максимально допустимый уровень для него
+    ENCH_WEAPON_DVA:
+        DURABILITY: 3
+        DAMAGE_ALL: 3
+        LUCK: 3
 UPGRADE: # опыт даваемый за заточку
     EMERALD:
         exp: 1
@@ -62,8 +69,10 @@ MOBS:
 ARMOR:
     LEATHER_HELMET:
         eval_level_strong: lvl * 0.1
+        enchant_group: ENCH_WEAPON_ODIN # название группы, из которой будет браться инфа о чарах при неудачной заточке
     IRON_HELMET:
         eval_level_strong: lvl * 0.2
+        enchant_group: ENCH_WEAPON_DVA
     GOLD_HELMET:
         eval_level_strong: lvl * 0.4
     DIAMOND_HELMET:
@@ -105,6 +114,7 @@ WEAPONS:
         eval_level_damage: 5 + lvl * 2
     WOOD_SWORD:
         eval_level_damage: 1 + lvl * 2
+        enchant_group: ENCH_WEAPON_ODIN
     STONE_SWORD:
         eval_level_damage: 2 + lvl * 2
     IRON_SWORD:
@@ -115,6 +125,7 @@ WEAPONS:
         eval_level_damage: 9 + lvl * 2
     WOOD_SPADE:
         eval_level_damage: 1 + lvl * 2
+        enchant_group: ENCH_WEAPON_DVA
     STONE_SPADE:
         eval_level_damage: 2 + lvl * 2
     IRON_SPADE:
