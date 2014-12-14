@@ -159,9 +159,9 @@ public class MainListener implements Listener {
         Entity attacker = event.getDamager(); // Кто атакует
         Entity attacked = event.getEntity(); // Того кого атакуют
 
-        System.out.println(event.getDamager() != null ? attacker.toString() : "Damager null");
+        /*System.out.println(event.getDamager() != null ? attacker.toString() : "Damager null");
         System.out.println(event.getEntity() != null ? attacked.toString() : "Entiter null");
-        System.out.println(event.getCause().toString());
+        System.out.println(event.getCause().toString());*/
 
         Player playerAttacker = getFromEntity(attacker); // Кто атакует
         Player playerAttacked = getFromEntity(attacked); // Того кого атакуют
