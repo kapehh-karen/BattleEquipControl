@@ -124,10 +124,15 @@ public class MainConfig {
                 EnchantGroupSet enchantGroupSet = new EnchantGroupSet(nameGroup);
                 Set<String> listEnchants = ((ConfigurationSection) cfg.get("ENCHANT_GROUPS." + nameGroup)).getKeys(false);
                 for (String nameEnchant : listEnchants) {
-                    enchantGroupSet.addEnchant(
-                            Enchantment.getByName(nameEnchant),
-                            cfg.getInt("ENCHANT_GROUPS." + nameGroup + "." + nameEnchant)
-                    );
+                    Enchantment enchantment = Enchantment.getByName(nameEnchant);
+                    if (enchantment != null) {
+                        enchantGroupSet.addEnchant(
+                            enchantment,
+                            cfg.getInt("ENCHANT_GROUPS." + nameGroup + "." + nameEnchant, 1)
+                        );
+                    } else {
+                        main.getLogger().warning("Enchantment '" + nameEnchant + "' not found!");
+                    }
                 }
                 enchantGroupConfig.addEnchantGroupSet(enchantGroupSet);
             }
