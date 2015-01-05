@@ -242,6 +242,11 @@ public class MainListener implements Listener {
     // Событие для заточки
     @EventHandler(priority = EventPriority.LOWEST)
     public void onCraftItem(CraftItemEvent event) {
+        // если как-то непонятно тыкают, то экшен NOTHING (например с зажатым пробелом тыкают)
+        if (event.getAction().equals(InventoryAction.NOTHING)) {
+            return;
+        }
+
         UpgradeManager upgradeManager = main.getUpgradeManager();
         if (upgradeManager.isRecipe(event.getRecipe())) {
 
