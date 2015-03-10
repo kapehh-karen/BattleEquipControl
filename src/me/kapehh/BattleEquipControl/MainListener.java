@@ -306,9 +306,9 @@ public class MainListener implements Listener {
             }
 
             int exp = 0;
-            if (fails > 0) { // если были неудачные заточки, то обнуляем
-                weaponUtil.setExp(0);
-                // чарим вещь, за то что обнулили её
+            if (fails > 0) { // ~если были неудачные заточки, то обнуляем~ вещь больше не обнуляется
+                //weaponUtil.setExp(0); больше не обнуляем
+                // чарим вещь ~за то что обнулили её~
                 EnchantGroupSet enchantGroupSet = iSet.getEnchantGroupSet();
                 if (enchantGroupSet != null) {
                     try {
