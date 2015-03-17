@@ -9,6 +9,7 @@ import me.kapehh.BattleEquipControl.upgrade.UpgradeManager;
 import me.kapehh.main.pluginmanager.config.PluginConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -19,12 +20,18 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
  * Created by Karen on 25.08.2014.
  */
 public class Main extends JavaPlugin {
+    public static Material WOOD_MY_SPADE;
+
     UpgradeManager upgradeManager = new UpgradeManager();
     ArmorConfig armorConfig = new ArmorConfig();
     WeaponConfig weaponConfig = new WeaponConfig();
@@ -32,6 +39,7 @@ public class Main extends JavaPlugin {
     NodamageConfig nodamageConfig = new NodamageConfig();
     UpgradeConfig upgradeConfig = new UpgradeConfig();
     EnchantGroupConfig enchantGroupConfig = new EnchantGroupConfig();
+    ArrayList<Material> unbrokenList = new ArrayList<Material>();
 
     /*public static void main(String[] args) {
         int rnd = 35 % 2;
@@ -74,6 +82,48 @@ public class Main extends JavaPlugin {
         resultFurnace.setItemMeta(itemMeta);
         FurnaceRecipe furnaceRecipe = new FurnaceRecipe(resultFurnace, Material.DIAMOND_SWORD);
         Bukkit.addRecipe(furnaceRecipe);*/
+
+        /*try {
+            Field f = Material.class.getDeclaredField("durability");
+            f.setAccessible(true);
+
+            Field modifiersField = Field.class.getDeclaredField("modifiers");
+            modifiersField.setAccessible(true);
+            modifiersField.setInt(f, f.getModifiers() & ~Modifier.FINAL);
+
+            f.set(Material.WOOD_SPADE, (short) 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
+
+        /*try {
+            Constructor<Material> constructor = Material.class.getDeclaredConstructor(
+                    Integer.class,
+                    Integer.class,
+                    Integer.class,
+
+            );
+            constructor.setAccessible(true);
+            WOOD_MY_SPADE = constructor.newInstance(269, 1, 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
+
+        /*try {
+            Material[] oldValues = (Material[]) ReflectionUtil.getStaticFieldValue(Material.class, "$VALUES");
+
+            Material me = (Material) ReflectionUtil.invokeEnumConstructor(Material.class, new Class[] {
+                    String.class, Material.class
+            }, new Object[]{ "Test", null });
+
+            for (Material value : Material.values()) {
+                System.out.println("- " + value);
+            }
+
+            //ReflectionUtil.setStaticFieldValue(Material.class, "$VALUES", oldValues);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
     }
 
     @Override
@@ -110,5 +160,8 @@ public class Main extends JavaPlugin {
     }
     public EnchantGroupConfig getEnchantGroupConfig() {
         return enchantGroupConfig;
+    }
+    public ArrayList<Material> getUnbrokenList() {
+        return unbrokenList;
     }
 }

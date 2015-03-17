@@ -99,8 +99,18 @@ public class MainConfig {
         NodamageConfig nodamageConfig = main.getNodamageConfig();
         UpgradeConfig upgradeConfig = main.getUpgradeConfig();
         EnchantGroupConfig enchantGroupConfig = main.getEnchantGroupConfig();
+        ArrayList<Material> unbrokenList = main.getUnbrokenList();
 
         main.getLogger().info("Start read config!");
+
+        unbrokenList.clear();
+        List<String> unbrk = cfg.getStringList("UNBROKEN");
+        for (String unbrkItem : unbrk) {
+            Material material = Material.valueOf(unbrkItem);
+            if (material != null) {
+                unbrokenList.add(material);
+            }
+        }
 
         int maxLevel = cfg.getInt("MAIN.max_level", 1);
         int maxLevelUpgrade = cfg.getInt("MAIN.max_level_upgrade", 1);

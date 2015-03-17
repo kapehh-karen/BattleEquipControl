@@ -17,7 +17,9 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.inventory.CraftingInventory;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
@@ -167,9 +169,19 @@ public class MainListener implements Listener {
         Player playerAttacked = getFromEntity(attacked); // Того кого атакуют
         double damage = event.getDamage();
 
+        if (playerAttacker != null) {
+            // восстанавливаем оружие
+            repairItemInHand(playerAttacker);
+        }
+
+        if (playerAttacked != null) {
+            // восстанавливаем броньку
+            repairArmor(playerAttacked.getInventory());
+        }
+
         // шипы не действуют если у игрока лук, и на моба скелетона
         if (cause.equals(EntityDamageEvent.DamageCause.THORNS)) {
-            if ((attacked instanceof Player) && playerAttacked.getItemInHand().getType().equals(Material.BOW)) {
+            if ((attacked instanceof Player) && (playerAttacked != null) && (playerAttacked.getItemInHand() != null) && playerAttacked.getItemInHand().getType().equals(Material.BOW)) {
                 event.setDamage(0);
                 event.setCancelled(true);
                 return;
@@ -238,6 +250,25 @@ public class MainListener implements Listener {
 
         Player playerAttacked = getFromEntity(event.getEntity()); // Того кого атакуют
     }*/
+
+    /*@EventHandler(ignoreCancelled = true)
+    public void onPlayerItemBreak(PlayerItemBreakEvent event) {
+        System.out.println("OPS SLOMALASJ: " + event.getBrokenItem());
+    }*/
+
+    /*@EventHandler(ignoreCancelled = true)
+    public void onPlayerItemBreak(PrepareItemCraftEvent event) {
+        ItemStack[] contents = event.getInventory().getContents();
+        System.out.println(Arrays.toString(contents));
+    }*/
+
+    @EventHandler
+    public void onChocoPie(InventoryClickEvent event) {
+        InventoryAction action = event.getAction();
+        if (action.equals(InventoryAction.PICKUP_ALL) || action.equals(InventoryAction.PICKUP_HALF)) {
+            repairItem(event.getCurrentItem());
+        }
+    }
 
     // Событие для заточки
     @EventHandler(priority = EventPriority.LOWEST)
@@ -337,12 +368,68 @@ public class MainListener implements Listener {
     // Событие для обновления описания предмета при простом использовании его
     @EventHandler(priority = EventPriority.LOWEST)
     public void onInteract(PlayerInteractEvent event) {
+        /*Player player = event.getPlayer();
+        PlayerInventory playerInventory = player.getInventory();
+        repairInventory(playerInventory);
+        repairArmor(playerInventory);
+        player.updateInventory();*/
+
+        repairItem(event.getItem());
+
+        /*if (event.getItem().getType().equals(Material.WOOD_SPADE)) {
+            System.out.println("SHA BUDET NORM");
+            event.getItem().setType(Main.WOOD_MY_SPADE);
+        }*/
+        //System.out.println("Item: " + event.getItem().getType().getMaxDurability());
+        //System.out.println("Item: " + event.getItem().getType().getClass().toString());
+
         if (event.isCancelled()) {
             return;
         }
 
         // Обновляем описание вещи
         updateLore(event.getPlayer(), false, null);
+    }
+
+    // неломаемость брони
+    private void repairArmor(PlayerInventory playerInventory) {
+        ItemStack helmet = playerInventory.getHelmet();
+        ItemStack chestplate = playerInventory.getChestplate();
+        ItemStack leggins = playerInventory.getLeggings();
+        ItemStack boots = playerInventory.getBoots();
+
+        repairItem(helmet);
+        repairItem(chestplate);
+        repairItem(leggins);
+        repairItem(boots);
+
+        // Записываем обновленные вещи
+        playerInventory.setHelmet(helmet);
+        playerInventory.setChestplate(chestplate);
+        playerInventory.setLeggings(leggins);
+        playerInventory.setBoots(boots);
+    }
+
+    private void repairInventory(PlayerInventory playerInventory) {
+        ItemStack[] contents = playerInventory.getContents();
+        ItemStack item;
+        for (int i = 0; i < contents.length; i++) {
+            item = contents[i];
+            if (item == null || item.getType().equals(Material.AIR)) continue;
+            repairItem(item);
+        }
+        playerInventory.setContents(contents);
+    }
+
+    private void repairItemInHand(Player player) {
+        repairItem(player.getItemInHand());
+    }
+
+    private void repairItem(ItemStack item) {
+        if (item == null) return;
+        if (main.getUnbrokenList().contains(item.getType())) {
+            item.setDurability((short) 0);
+        }
     }
 
     // Обновление описания предметов игрока
