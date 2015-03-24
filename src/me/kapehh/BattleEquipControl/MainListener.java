@@ -219,6 +219,19 @@ public class MainListener implements Listener {
         event.setDamage(damage);
     }
 
+    @EventHandler
+    public void onDamageEntity(EntityDamageEvent event) {
+        /*
+        1) доспехи ломаются если встать в огонь
+        2) доспехи ломаются если взорваться в них
+        3) доспехи ломаются если налетать на кактус
+         */
+        if (event.getEntity() instanceof Player) {
+            // восстанавливаем броньку
+            repairArmor(((Player)event.getEntity()).getInventory());
+        }
+    }
+
     @EventHandler(priority = EventPriority.LOWEST)
     public void onDeath(EntityDeathEvent event) {
         Player player = event.getEntity().getKiller();
