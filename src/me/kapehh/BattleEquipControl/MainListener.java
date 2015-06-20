@@ -169,6 +169,9 @@ public class MainListener implements Listener {
         Player playerAttacked = getFromEntity(attacked); // Того кого атакуют
         double damage = event.getDamage();
 
+        // TODO: Remove
+        String debugString = "EntityDamageByEntityEvent[" + cause + "]: " + attacker + " -> " + attacked + " => " + damage;
+
         if (playerAttacker != null) {
             // восстанавливаем оружие
             repairItemInHand(playerAttacker);
@@ -202,7 +205,7 @@ public class MainListener implements Listener {
         if (playerAttacker != null) {
             double attackerDamage = getDamage(event.getDamager());
             if (attackerDamage > 0) {
-                damage += attackerDamage;
+                damage = attackerDamage;
             } else if (attackerDamage < 0) {
                 damage = 0;
             }
@@ -216,7 +219,24 @@ public class MainListener implements Listener {
 
         // Ну мало ли :DD
         if (damage < 0) damage = 0;
-        event.setDamage(damage);
+        //event.setDamage(damage); FIX
+        if (attacked instanceof LivingEntity) {
+            LivingEntity livingEntity = (LivingEntity) attacked;
+
+            // TODO: Remove
+            debugString += ", Now LivingEntity HP = " + livingEntity.getHealth();
+
+            if (damage < livingEntity.getHealth()) {
+                livingEntity.setHealth(livingEntity.getHealth() - damage);
+                event.setDamage(0); // ignore base damage, но не отменяем событие, чтоб анимация осталась
+            } else {
+                livingEntity.setHealth(0);
+            }
+        }
+
+        // TODO: Remove
+        debugString += ". Result damage: " + damage;
+        System.out.println(debugString);
     }
 
     @EventHandler

@@ -13,11 +13,16 @@ public class MainCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
-        ItemStack itemStack = ((Player) sender).getItemInHand();
+        if (!sender.isOp()) {
+            sender.sendMessage("No");
+            return true;
+        }
+        /*ItemStack itemStack = ((Player) sender).getItemInHand();
         if (itemStack != null) {
             sender.sendMessage(itemStack.getType().toString());
             sender.sendMessage(itemStack.getData().toString());
-        }
+        }*/
+        sender.sendMessage("HP: " + ((Player) sender).getHealth());
         return true;
     }
 }
