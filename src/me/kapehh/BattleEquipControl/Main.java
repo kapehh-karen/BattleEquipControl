@@ -2,6 +2,7 @@ package me.kapehh.BattleEquipControl;
 
 import me.kapehh.BattleEquipControl.bukkit.EnchantmentManager;
 import me.kapehh.BattleEquipControl.core.*;
+import me.kapehh.BattleEquipControl.hooks.ArmorHook;
 import me.kapehh.BattleEquipControl.sets.ArmorSet;
 import me.kapehh.BattleEquipControl.sets.ISet;
 import me.kapehh.BattleEquipControl.sets.WeaponSet;
@@ -40,6 +41,7 @@ public class Main extends JavaPlugin {
     UpgradeConfig upgradeConfig = new UpgradeConfig();
     EnchantGroupConfig enchantGroupConfig = new EnchantGroupConfig();
     ArrayList<Material> unbrokenList = new ArrayList<Material>();
+    ArmorHook armorHook;
 
     /*public static void main(String[] args) {
         int rnd = 35 % 2;
@@ -64,6 +66,14 @@ public class Main extends JavaPlugin {
 
         // init upgrades
         upgradeManager.init(this);
+
+        try {
+            // Убираем у брони всякий деф
+            armorHook = new ArmorHook();
+            armorHook.offAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         //EnchantmentManager.init();
         /*ShapedRecipe recipe = new ShapedRecipe(new ItemStack(Material.WOOD_SWORD, 1));
@@ -128,7 +138,8 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
-
+        // Возвращаем деф по умолчанию
+        armorHook.restore();
     }
 
     public ISet getIset(ItemStack itemStack) {

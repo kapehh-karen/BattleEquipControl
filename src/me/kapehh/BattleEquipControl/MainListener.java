@@ -146,8 +146,9 @@ public class MainListener implements Listener {
             }
         }
 
-        if (procents < 0) procents = 0;
-        if (procents > 100) procents = 100;
+        // Убрал проверки
+        //if (procents < 0) procents = 0;
+        //if (procents > 100) procents = 100;
         return procents;
     }
 
@@ -205,22 +206,28 @@ public class MainListener implements Listener {
         if (playerAttacker != null) {
             double attackerDamage = getDamage(event.getDamager());
             if (attackerDamage > 0) {
-                damage = attackerDamage;
+                damage += attackerDamage; // Добавляем дамаг
             } else if (attackerDamage < 0) {
                 damage = 0;
             }
+
+            // TODO: Remove
+            debugString += ", Before Defence Damage = " + damage;
         }
 
         // Если есть игрок которого атакуют
         if (playerAttacked != null) {
             double attackedStrong = getStrong(event.getEntity());
             damage = damage - (damage * (attackedStrong / 100));
+
+            // TODO: Remove
+            debugString += ", Defence = " + attackedStrong + "%, After Defence Damage = " + damage;
         }
 
         // Ну мало ли :DD
         if (damage < 0) damage = 0;
-        //event.setDamage(damage); FIX
-        if (attacked instanceof LivingEntity) {
+        event.setDamage(damage); // TODO: NEXT FIX
+        /*if (attacked instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity) attacked;
 
             // TODO: Remove
@@ -232,7 +239,7 @@ public class MainListener implements Listener {
             } else {
                 livingEntity.setHealth(0);
             }
-        }
+        }*/
 
         // TODO: Remove
         debugString += ". Result damage: " + damage;
