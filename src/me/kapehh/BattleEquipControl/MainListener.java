@@ -170,8 +170,8 @@ public class MainListener implements Listener {
         Player playerAttacked = getFromEntity(attacked); // Того кого атакуют
         double damage = event.getDamage();
 
-        // TODO: Remove
-        String debugString = "EntityDamageByEntityEvent[" + cause + "]: " + attacker + " -> " + attacked + " => " + damage;
+        String debugString = "";
+        if (Main.debug) debugString = "EntityDamageByEntityEvent[" + cause + "]: " + attacker + " -> " + attacked + " => " + damage;
 
         if (playerAttacker != null) {
             // восстанавливаем оружие
@@ -211,8 +211,7 @@ public class MainListener implements Listener {
                 damage = 0;
             }
 
-            // TODO: Remove
-            debugString += ", Before Defence Damage = " + damage;
+            if (Main.debug) debugString += ", Before Defence Damage = " + damage;
         }
 
         // Если есть игрок которого атакуют
@@ -220,8 +219,7 @@ public class MainListener implements Listener {
             double attackedStrong = getStrong(event.getEntity());
             damage = damage - (damage * (attackedStrong / 100));
 
-            // TODO: Remove
-            debugString += ", Defence = " + attackedStrong + "%, After Defence Damage = " + damage;
+            if (Main.debug) debugString += ", Defence = " + attackedStrong + "%, After Defence Damage = " + damage;
         }
 
         // Ну мало ли :DD
@@ -230,8 +228,7 @@ public class MainListener implements Listener {
         /*if (attacked instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity) attacked;
 
-            // TODO: Remove
-            debugString += ", Now LivingEntity HP = " + livingEntity.getHealth();
+            if (Main.debug) debugString += ", Now LivingEntity HP = " + livingEntity.getHealth();
 
             if (damage < livingEntity.getHealth()) {
                 livingEntity.setHealth(livingEntity.getHealth() - damage);
@@ -241,8 +238,7 @@ public class MainListener implements Listener {
             }
         }*/
 
-        // TODO: Remove
-        debugString += ". Result damage: " + damage;
+        if (Main.debug) debugString += ". Result damage: " + damage;
         System.out.println(debugString);
     }
 
@@ -326,6 +322,7 @@ public class MainListener implements Listener {
             Player player = (Player) event.getWhoClicked();
             ItemStack itemSource = inventory.getItem(5);
             ItemStack itemUpgrader = inventory.getItem(1);
+
             UpgradeSet upgradeSet = main.getUpgradeConfig().getUpgradeSet(itemUpgrader.getData());
             ISet iSet = main.getIset(itemSource);
             if (iSet == null || upgradeSet == null) {
@@ -357,7 +354,6 @@ public class MainListener implements Listener {
                 for (int i = 1; i <= 9; i++) {
                     if (i == 5) continue; // не нужон
                     tmp = inventory.getItem(i);
-                    //c = tmp.getAmount();
                     tmp.setAmount(tmp.getAmount() - min); // вычитаем минимально возможную херню
                 }
             }
@@ -377,9 +373,9 @@ public class MainListener implements Listener {
             }
 
             int exp = 0;
-            if (fails > 0) { // ~если были неудачные заточки, то обнуляем~ вещь больше не обнуляется
-                //weaponUtil.setExp(0); больше не обнуляем
-                // чарим вещь ~за то что обнулили её~
+            // Больше не чарим при неудачных заточках
+            /*if (fails > 0) {
+                // чарим вещь
                 EnchantGroupSet enchantGroupSet = iSet.getEnchantGroupSet();
                 if (enchantGroupSet != null) {
                     try {
@@ -390,9 +386,7 @@ public class MainListener implements Listener {
                     // т.к. в Meta хранится инфа о чарах, если не вызвать, чары после weaponUtil.save() пропадут
                     weaponUtil.updateMeta();
                 }
-                //itemSource.addUnsafeEnchantment(Enchantment.FIRE_ASPECT, 10);
-                //System.out.println(itemSource.getEnchantments()); // todo
-            }
+            }*/
             if (res_koef > 0) { // если коэфицент после последней последовательности удачных заточек есть, то качаем
                 exp = upgradeSet.getExp() * res_koef;
                 upgradeWeapon(weaponUtil, iSet, exp, true);
@@ -401,7 +395,6 @@ public class MainListener implements Listener {
 
             weaponUtil.save();
             event.setCurrentItem(itemSource);
-            //System.out.println(itemSource.getEnchantments()); // todo
         }
     }
 
@@ -571,10 +564,10 @@ public class MainListener implements Listener {
     }
 
     private static Random rand = new Random();
-    private int randInt(int min, int max) {
+    public static int randInt(int min, int max) {
         return rand.nextInt((max - min) + 1) + min;
     }
-    private double randDouble(double min, double max) {
+    public static double randDouble(double min, double max) {
         return min + rand.nextDouble() * (max - min);
     }
 }

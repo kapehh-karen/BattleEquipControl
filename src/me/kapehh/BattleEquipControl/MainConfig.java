@@ -99,11 +99,26 @@ public class MainConfig {
         NodamageConfig nodamageConfig = main.getNodamageConfig();
         UpgradeConfig upgradeConfig = main.getUpgradeConfig();
         EnchantGroupConfig enchantGroupConfig = main.getEnchantGroupConfig();
+        ConvertConfig convertConfig = main.getConvertConfig();
         ArrayList<Material> unbrokenList = main.getUnbrokenList();
+
+        // clear
+        armorConfig.armorSets.clear();
+        weaponConfig.weaponSets.clear();
+        mobConfig.mobSetList.clear();
+        nodamageConfig.materials.clear();
+        upgradeConfig.upgradeSetList.clear();
+        enchantGroupConfig.enchantGroupSets.clear();
+        unbrokenList.clear();
+        // end clear
 
         main.getLogger().info("Start read config!");
 
-        unbrokenList.clear();
+        convertConfig.upgradeConfig = upgradeConfig;
+        convertConfig.percent_of_convert = cfg.getDouble("MAIN.percent_of_convert");
+
+        Main.debug = cfg.getBoolean("MAIN.debug");
+
         List<String> unbrk = cfg.getStringList("UNBROKEN");
         for (String unbrkItem : unbrk) {
             Material material = Material.valueOf(unbrkItem);

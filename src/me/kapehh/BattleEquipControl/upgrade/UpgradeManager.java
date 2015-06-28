@@ -31,7 +31,7 @@ public class UpgradeManager {
             resultItem = new ItemStack(Material.BOOK, 1, (short)123);
             ItemMeta meta = resultItem.getItemMeta();
             List<String> lore = new ArrayList<String>();
-            lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "Кликните для заточки предмета");
+            lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "Кликните для апгрейда предмета");
             meta.setDisplayName(ChatColor.RESET + "" + ChatColor.BOLD + "Заточка");
             meta.setLore(lore);
             resultItem.setItemMeta(meta);
@@ -49,6 +49,22 @@ public class UpgradeManager {
                 addMaterialAndUpgrade(weaponSet.getMaterial(), upgradeSet.getMaterial());
             }
         }
+
+        for (ArmorSet armorSet : armorConfig.armorSets) {
+            addMaterial(armorSet.getMaterial());
+        }
+
+        for (WeaponSet weaponSet : weaponConfig.weaponSets) {
+            addMaterial(weaponSet.getMaterial());
+        }
+    }
+
+    private void addMaterial(Material material) {
+        ShapedRecipe recipe = new ShapedRecipe(resultItem);
+        recipe.shape("UUU", "UUU", "UUU");
+        recipe.setIngredient('U', material);
+        recipes.add(recipe);
+        Bukkit.getServer().addRecipe(recipe);
     }
 
     private void addMaterialAndUpgrade(Material material, MaterialData upgrader) {

@@ -31,7 +31,7 @@ import java.util.Random;
  * Created by Karen on 25.08.2014.
  */
 public class Main extends JavaPlugin {
-    public static Material WOOD_MY_SPADE;
+    public static boolean debug = false;
 
     UpgradeManager upgradeManager = new UpgradeManager();
     ArmorConfig armorConfig = new ArmorConfig();
@@ -39,6 +39,7 @@ public class Main extends JavaPlugin {
     MobConfig mobConfig = new MobConfig();
     NodamageConfig nodamageConfig = new NodamageConfig();
     UpgradeConfig upgradeConfig = new UpgradeConfig();
+    ConvertConfig convertConfig = new ConvertConfig();
     EnchantGroupConfig enchantGroupConfig = new EnchantGroupConfig();
     ArrayList<Material> unbrokenList = new ArrayList<Material>();
     ArmorHook armorHook;
@@ -57,7 +58,7 @@ public class Main extends JavaPlugin {
         }
 
         getServer().getPluginManager().registerEvents(new MainListener(this), this);
-        getCommand("battleequip").setExecutor(new MainCommand());
+        getCommand("battleequip").setExecutor(new MainCommand(this));
 
         PluginConfig pluginConfig = new PluginConfig(this);
         pluginConfig.addEventClasses(new MainConfig(this));
@@ -174,5 +175,8 @@ public class Main extends JavaPlugin {
     }
     public ArrayList<Material> getUnbrokenList() {
         return unbrokenList;
+    }
+    public ConvertConfig getConvertConfig() {
+        return convertConfig;
     }
 }

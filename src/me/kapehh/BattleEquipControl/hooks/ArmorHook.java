@@ -1,5 +1,6 @@
 package me.kapehh.BattleEquipControl.hooks;
 
+import me.kapehh.BattleEquipControl.Main;
 import net.minecraft.server.v1_7_R4.Item;
 import net.minecraft.server.v1_7_R4.ItemArmor;
 
@@ -69,8 +70,8 @@ public class ArmorHook {
                 val = armorValueField.getInt(i);
                 armorValueField.set(i, value);
                 oldValues.put((ItemArmor) i, val);
-                // TODO: Remove
-                System.out.printf("Set armor def " + i.getName() + " to " + value + " (old value: " + val + ")");
+                // debug
+                if (Main.debug) System.out.printf("Set armor def " + i.getName() + " to " + value + " (old value: " + val + ")");
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
@@ -84,8 +85,8 @@ public class ArmorHook {
     public void restore(){
         for(ItemArmor i : oldValues.keySet()){
             try {
-                // TODO: Remove
-                System.out.println("Restoring " + i.getName() + " to " + oldValues.get(i));
+                // debug
+                if (Main.debug) System.out.println("Restoring " + i.getName() + " to " + oldValues.get(i));
                 armorValueField.set(i, oldValues.get(i));
             } catch (Exception e) {
                 e.printStackTrace();
