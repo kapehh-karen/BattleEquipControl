@@ -7,8 +7,10 @@ import me.kapehh.BattleEquipControl.sets.ArmorSet;
 import me.kapehh.BattleEquipControl.sets.ISet;
 import me.kapehh.BattleEquipControl.sets.WeaponSet;
 import me.kapehh.BattleEquipControl.upgrade.UpgradeManager;
+import me.kapehh.main.pluginmanager.checker.PluginChecker;
 import me.kapehh.main.pluginmanager.config.PluginConfig;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.FurnaceRecipe;
@@ -58,7 +60,10 @@ public class Main extends JavaPlugin {
         }
 
         getServer().getPluginManager().registerEvents(new MainListener(this), this);
-        getCommand("battleequip").setExecutor(new MainCommand(this));
+
+        MainCommand mainCommand = new MainCommand(this);
+        mainCommand.setHasUnicornMailbox(new PluginChecker(this).check("UnicornMailbox", false));
+        getCommand("battleequip").setExecutor(mainCommand);
 
         PluginConfig pluginConfig = new PluginConfig(this);
         pluginConfig.addEventClasses(new MainConfig(this));
@@ -150,6 +155,14 @@ public class Main extends JavaPlugin {
             return (weaponSet == null) ? armorSet : weaponSet;
         else
             return null;
+    }
+
+    public static String getErrorMessage(String message) {
+        return ChatColor.BOLD + "[BEC] " + ChatColor.RESET + ChatColor.RED + message;
+    }
+
+    public static String getNormalMessage(String message) {
+        return ChatColor.BOLD + "[BEC] " + ChatColor.RESET + ChatColor.YELLOW + message;
     }
 
     public ArmorConfig getArmorConfig() {

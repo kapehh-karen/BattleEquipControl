@@ -11,5 +11,6 @@
     <orderEntry type="library" name="bukkit-1.7.9-R0.1" level="project" />
     <orderEntry type="library" name="spigot1710" level="project" />
     <orderEntry type="library" name="spigot187" level="project" />
+    <orderEntry type="library" name="UnicornMailbox" level="project" />
   </component>
 </module>

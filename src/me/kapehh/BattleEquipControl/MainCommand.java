@@ -6,17 +6,29 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.List;
 
 /**
  * Created by Karen on 26.08.2014.
  */
 public class MainCommand implements CommandExecutor {
     Main main;
+    boolean hasUnicornMailbox = false;
 
     public MainCommand(Main main) {
         this.main = main;
+    }
+
+    public boolean isHasUnicornMailbox() {
+        return hasUnicornMailbox;
+    }
+
+    public void setHasUnicornMailbox(boolean hasUnicornMailbox) {
+        this.hasUnicornMailbox = hasUnicornMailbox;
     }
 
     public int getAllExp(ItemStack itemStack, Player player) {
@@ -39,14 +51,34 @@ public class MainCommand implements CommandExecutor {
             ItemStack itemStack = player.getItemInHand();
             if (itemStack != null) {
                 if (main.getIset(itemStack) != null) {
-                    sender.sendMessage(main.getConvertConfig().getConvertForItem(itemStack, getAllExp(itemStack, (Player) sender)).toString());
-                    //player.setItemInHand(null);
+                    if (hasUnicornMailbox) {
+                        me.kapehh.UnicornMailbox.Main unicornMailbox = me.kapehh.UnicornMailbox.Main.instance;
+                        if (unicornMailbox != null) {
+                            List<ItemStack> converts = main.getConvertConfig().getConvertForItem(itemStack, getAllExp(itemStack, player));
+                            ItemStack[] arrConverts = converts.toArray(new ItemStack[converts.size()]);
+
+                            player.setItemInHand(null);
+
+                            unicornMailbox.getMailCore().sendItemsToPlayer(
+                                    player.getName(),
+                                    "BattleEquipControl::Convert",
+                                    arrConverts
+                            );
+
+                            player.sendMessage(Main.getNormalMessage("Готово."));
+                        } else {
+                            main.getLogger().info("Error! UnicornMailbox is null!");
+                        }
+                    } else {
+                        player.sendMessage(Main.getErrorMessage("Плагин почты не найден!"));
+                    }
                 } else {
-                    player.sendMessage(ChatColor.RED + "Возьмите в руки оружие или броню!");
+                    player.sendMessage(Main.getErrorMessage("Возьмите в руки оружие или броню!"));
                 }
             }
         } else {
-            sender.sendMessage(ChatColor.RED + "Некорректные аргументы!");
+            sender.sendMessage(Main.getErrorMessage("Некорректные аргументы!"));
+            return false;
         }
         return true;
     }

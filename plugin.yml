@@ -4,6 +4,6 @@ author: kapehh
 version: 1.0.0
 commands:
     battleequip:
-        usage: /<command>
+        usage: /<command> convert
         description: Read manual
         aliases: bec
