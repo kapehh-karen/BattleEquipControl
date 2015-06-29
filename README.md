@@ -8,7 +8,7 @@ BattleEquipControl
 
 <b>Команды:</b>
 <ul>
-<li><code>bec convert</code> - конвертирует вещь в ресурсы и отправляет их игроку через плагин <b>UnicornMailbox</b>. Конвертация происходит переводом опыта текущего предмета (с заранее снятым процентом <b>percent_of_convert</b>) в ресурсы из секции <b>UPGRADE</b></li>
+<li><code>/bec convert</code> - конвертирует вещь в ресурсы и отправляет их игроку через плагин <a href="//github.com/kapehh-karen/UnicornMailbox">UnicornMailbox</a>. Конвертация происходит переводом опыта текущего предмета (с заранее снятым процентом <b>percent_of_convert</b>) в ресурсы из секции <b>UPGRADE</b></li>
 </ul>
 
 <b>Конфиг:</b>
